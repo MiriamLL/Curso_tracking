@@ -1,0 +1,170 @@
+---
+title: "Parte 1"
+subtitle: "Importar datos de GPS<br>"
+author: "Miriam Lerma"
+date: "Marzo 2021"
+output:
+  xaringan::moon_reader:
+    css: ["default"]
+    seal: false
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: true
+      
+---
+
+```{r include = FALSE}
+#Paquetes
+library(xaringanExtra)
+```
+
+class: title-slide, inverse, middle, right
+background-image: url(https://images.unsplash.com/photo-1511721285502-9f81e79be874?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2134&q=80)
+background-size: cover
+
+### `r rmarkdown::metadata$title`
+# `r rmarkdown::metadata$subtitle`
+
+**`r rmarkdown::metadata$author`**<br>
+`r rmarkdown::metadata$date`
+
+---
+
+# Intro
+
+- Me hacen regularmente las mismas consultas de como pueden importar y limpiar sus datos de GPS, por lo que decidi agregar materiales que les pueden servir para empezar a trabajar sus datos.
+
+En esta presentacion veran como:
+- Importar datos a R
+- Eliminar periodos dentro de nuestros datos
+- Graficar trayectorias
+- Exportar nuestro nuevo data frame
+
+```{r, echo=FALSE,include=FALSE, message=FALSE}
+library(emo)
+library(here)
+library(fontawesome)
+library(ggplot2)
+```
+
+--
+
+## Ustedes
+
+- Quieren importar sus datos de GPS a R y limpiarlos. <br>
+
+- Tienen conocimientos basicos de R, si no [empezar aqui](https://miriamll.github.io/Curso_CIAD/Clase1Parte2) <br>
+  
+---
+
+# 1. Importar datos a R
+
+---
+
+## 1.2. Paquetes
+
+Para esta parte necesitas saber instalar paquetes, si no sabes puedes [Empezar por aqui](https://miriamll.github.io/Curso_CIAD/Clase1Parte2)
+
+Cargar el paquete tidyverse
+```{r, message="FALSE", warning='FALSE'}
+#install.packages(tidyverse)
+#intall.packages(here)
+library("tidyverse")
+library(here)
+```
+
+Define carpeta ya sea con ruta relativa (usando here) o absoluta (poniendo toda la ruta), si necesitas mas informacion de rutas [ve aqui](https://miriamll.github.io/Curso_CIAD/Clase4Parte1#1)
+```{r}
+DatosFolder<-'C://Users//Lerma//Documents//4Cursos//1Bobos//ClaseTracking//01Datos'
+DatosFolder<-here("01Datos")
+```
+
+---
+
+## 1.3. Formato CSV
+
+Normalmente los dispositivos registran datos en csv.
+
+Para cargarlos manualmente: esquina inferior derecha. 
+Files> Doble clic en el archivo de **GPS01.csv**  
+Esta separado por comas, entonces:  
+read_csv se usa cuando los valores están separados por **comas**.  
+
+```{r, eval=FALSE}
+GPS01_csv<-read_csv(paste0(DatosFolder,("//GPS01.csv")))
+```
+
+```{r, eval=FALSE}
+head(GPS01_csv)
+```
+
+---
+
+## 1.4. Formato xls
+
+Hay que cargar la librería readxl
+```{r, eval=FALSE}
+library("readxl")
+```
+
+read_excel se usa para cargar archivos de excel.
+```{r, eval=FALSE}
+GPS01_excel<- read_excel(paste0(DatosFolder,("//GPS01.xlsx")))
+```
+
+```{r, eval=FALSE}
+head(GPS01_excel)
+```
+
+---
+
+## 1.5. Multiples archivos
+
+Para cargar multiples archivos, te recomiendo definir la carpeta donde tienes tus archivos y pidele a R que te los enliste.
+```{r, eval=FALSE}
+FilesTracking <- list.files(DatosFolder,pattern="*.txt",full.names=TRUE)
+FilesTracking #Te muestra todos los documentos de la carpeta
+```
+Importante: define si son txt, xlsx o csvs.
+
+---
+
+## 1.5. Multiples archivos
+
+Esta funcion sirve para leer todos los archivos.
+```{r, eval=FALSE, message=FALSE}
+ListTracking <- lapply(FilesTracking,read_tsv)
+```
+Si quieres descargar los archivos de prueba [ve aqui]()
+
+Esta funcion te permite unirlos.
+```{r, eval=FALSE}
+AllTracks <- do.call("rbind",ListTracking)
+```
+Pero **ojo** el numero de columnas y nombres de las columnas debe ser lo mismo.
+
+```{r}
+AllTracks
+```
+
+---
+
+## 2. Eliminar periodos dentro de nuestros datos
+
+```{r}
+
+```
+
+
+---
+
+# Parte 3
+## Graficar trayectorios
+
+---
+
+# Parte 4
+## Exportar nuestro nuevo data frame
+
+---
