@@ -20,7 +20,7 @@ library(xaringanExtra)
 ```
 
 class: title-slide, inverse, middle, right
-background-image: url(https://images.unsplash.com/photo-1511721285502-9f81e79be874?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2134&q=80)
+background-image: url(https://images.unsplash.com/photo-1473163928189-364b2c4e1135?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80)
 background-size: cover
 
 ### `r rmarkdown::metadata$title`
@@ -33,9 +33,7 @@ background-size: cover
 
 # Intro
 
-- Me hacen regularmente las mismas consultas de como pueden importar y limpiar sus datos de GPS, por lo que decidi agregar materiales que les pueden servir para empezar a trabajar sus datos.
-
-En esta presentacion veran como:
+En esta presentación verán como:
 - Importar datos a R
 - Eliminar periodos dentro de nuestros datos
 - Graficar trayectorias
@@ -53,62 +51,65 @@ library(ggplot2)
 ## Ustedes
 
 - Quieren importar sus datos de GPS a R y limpiarlos. <br>
-
-- Tienen conocimientos basicos de R, si no [empezar aqui](https://miriamll.github.io/Curso_CIAD/Clase1Parte2) <br>
+- Tienen conocimientos básicos de R, si no te recomiendo [empezar aqui](https://miriamll.github.io/Curso_CIAD/Clase1Parte2). <br>
   
 ---
 
-# 1. Importar datos a R
+## 1. Importar datos a R
+### 1.2. Paquetes
 
----
-
-## 1.2. Paquetes
-
-Para esta parte necesitas saber instalar paquetes, si no sabes puedes [Empezar por aqui](https://miriamll.github.io/Curso_CIAD/Clase1Parte2)
+Para esta parte necesitas saber instalar paquetes, si necesitas recordar como hacerlo, te recomiendo [empezar por aqui](https://miriamll.github.io/Curso_CIAD/Clase1Parte2).
 
 Cargar el paquete tidyverse
-```{r, message="FALSE", warning='FALSE'}
+```{r, message=FALSE, warning=FALSE}
 #install.packages(tidyverse)
-#intall.packages(here)
-library("tidyverse")
+#install.packages(here)
+library(tidyverse)
 library(here)
 ```
 
-Define carpeta ya sea con ruta relativa (usando here) o absoluta (poniendo toda la ruta), si necesitas mas informacion de rutas [ve aqui](https://miriamll.github.io/Curso_CIAD/Clase4Parte1#1)
+Define carpeta ya sea con ruta relativa (usando here) o absoluta (poniendo toda la ruta), si necesitas mas información de como escribir tus rutas [ve aqui](https://miriamll.github.io/Curso_CIAD/Clase4Parte1#1).
 ```{r}
-DatosFolder<-'C://Users//Lerma//Documents//4Cursos//1Bobos//ClaseTracking//01Datos'
-DatosFolder<-here("01Datos")
+DatosFolder<-'C://Users//Lerma//Documents//4Cursos//1Bobos//ClaseTracking//01Datos' #tienes que cambiar la ruta por la ruta donde descargaste tus archivos
+DatosFolder<-here("01Datos") #tienes que haber creado una carpeta donde tienes tus archivos
 ```
 
 ---
 
-## 1.3. Formato CSV
+### 1.3. Manualmente
 
 Normalmente los dispositivos registran datos en csv.
 
-Para cargarlos manualmente: esquina inferior derecha. 
-Files> Doble clic en el archivo de **GPS01.csv**  
-Esta separado por comas, entonces:  
-read_csv se usa cuando los valores están separados por **comas**.  
+Para cargarlos manualmente: esquina superior derecha. <br>
+Import Dataset.  
 
-```{r, eval=FALSE}
-GPS01_csv<-read_csv(paste0(DatosFolder,("//GPS01.csv")))
+```{r echo=FALSE, out.height=350}
+knitr::include_graphics("https://raw.githubusercontent.com/MiriamLL/Curso_CIAD/main/Figuras/ImportarBoton.jpg")
 ```
 
-```{r, eval=FALSE}
-head(GPS01_csv)
+---
+### 1.3. Formato txt
+
+La funcion read_tvs se usa cuando los valores están separados por **tabs/espacios**.  
+
+```{r, message=FALSE}
+GPS01_txt<-read_tsv(paste0(DatosFolder,("//GPS01.txt")))
+```
+
+```{r}
+head(GPS01_txt)
 ```
 
 ---
 
-## 1.4. Formato xls
+### 1.4. Formato xlsx
 
 Hay que cargar la librería readxl
 ```{r, eval=FALSE}
 library("readxl")
 ```
 
-read_excel se usa para cargar archivos de excel.
+La funcion read_excel se usa para cargar archivos de excel.
 ```{r, eval=FALSE}
 GPS01_excel<- read_excel(paste0(DatosFolder,("//GPS01.xlsx")))
 ```
@@ -119,52 +120,173 @@ head(GPS01_excel)
 
 ---
 
-## 1.5. Multiples archivos
+### 1.5. Multiples archivos
 
-Para cargar multiples archivos, te recomiendo definir la carpeta donde tienes tus archivos y pidele a R que te los enliste.
-```{r, eval=FALSE}
-FilesTracking <- list.files(DatosFolder,pattern="*.txt",full.names=TRUE)
-FilesTracking #Te muestra todos los documentos de la carpeta
+Para cargar múltiples archivos, te recomiendo definir la carpeta donde tienes tus archivos y pedirle a R que te los enliste.
+```{r}
+Lista_GPS <- list.files(DatosFolder,pattern="*.csv",full.names=TRUE)
 ```
-Importante: define si son txt, xlsx o csvs.
+Importante: tu debes definir si son txt, xlsx o csvs.
 
 ---
 
-## 1.5. Multiples archivos
+### 1.5. Leer multiples archivos
 
-Esta funcion sirve para leer todos los archivos.
-```{r, eval=FALSE, message=FALSE}
-ListTracking <- lapply(FilesTracking,read_tsv)
+Esta función sirve para leer todos los archivos.
+```{r, message=FALSE}
+Lista_GPS <- lapply(Lista_GPS,read_csv)
 ```
-Si quieres descargar los archivos de prueba [ve aqui]()
+Si quieres descargar los archivos de prueba [ve aqui](https://github.com/MiriamLL/Curso_tracking/tree/main/01Datos).
 
-Esta funcion te permite unirlos.
-```{r, eval=FALSE}
-AllTracks <- do.call("rbind",ListTracking)
+---
+
+### 1.6. Agregar ID
+
+**Opción 1:**  
+Uno por uno
+```{r}
+GPS01<-Lista_GPS[1]
+```
+
+```{r}
+GPS01$ID<-'GPS01'
+```
+
+Solo recomendable para listas pequeñas.
+```{r}
+GPS02<-Lista_GPS[2]
+GPS02$ID<-'GPS02'
+```
+
+---
+
+### 1.6. Usando lista
+
+**Opción 2:**  
+Usando el nombre del archivo
+```{r}
+Nombres_archivos<-list.files(DatosFolder,pattern="*.csv",full.names=FALSE)
+IDs<-gsub('.csv','',Nombres_archivos)
+```
+
+Agrega una columna a cada elemento de la lista.
+```{r}
+for( i in seq_along(Lista_GPS)){
+  Lista_GPS[[i]]$IDs <- IDs[i]
+}
+```
+
+---
+
+### 1.6. Especificando nombres
+
+**Opción 3:**  
+Creando vector con los nombres.
+```{r}
+IDs<-c("ID01","ID02","ID03","ID04","ID05","ID06","ID07","ID08","ID09","ID10")
+```
+
+Agrega el nombre definido en ID en orden a los elementos de la lista.
+```{r}
+for( i in seq_along(Lista_GPS)){
+  Lista_GPS[[i]]$IDs <- IDs[i]
+}
+```
+
+
+---
+
+### 1.7. Unir multiples archivos
+
+Esta función te permite unirlos.
+```{r}
+Todos_GPS <- do.call("rbind",Lista_GPS)
 ```
 Pero **ojo** el numero de columnas y nombres de las columnas debe ser lo mismo.
 
 ```{r}
-AllTracks
+Todos_GPS
 ```
+
 
 ---
 
-## 2. Eliminar periodos dentro de nuestros datos
+
+## 2. Recortar
+### 2.1. Eliminar periodos dentro de nuestros datos
+
+Supongamos que el GPS01, se coloco a las 18:10:00 del 02/11/2017 y se retiro a las 14:10:00 el 05/11/2017.
+
+Se debe convertir la hora de inicio y la hora final a formato día y hora.
+```{r}
+HoraInicio<-'02/11/2017 18:10:00'
+HoraInicio<-as.POSIXct(strptime(HoraInicio, "%d/%m/%Y %H:%M:%S"), "GMT") 
+```
 
 ```{r}
+HoraFinal<-'05/11/2017 14:10:00'
+HoraFinal<- as.POSIXct(strptime(HoraFinal, "%d/%m/%Y %H:%M:%S"), "GMT") 
+```
 
+Después se puede seleccionar solo el periodo que nos interesa.
+```{r}
+GPS01_txt$tStamp<-paste(GPS01_txt$DateGMT,GPS01_txt$TimeGMT)
+GPS01_txt$tStamp1<-as.POSIXct(strptime(GPS01_txt$tStamp, "%d/%m/%Y %H:%M:%S"),  "GMT") 
+GPS01<-mutate(GPS01_txt, Tracking = ifelse(GPS01_txt$tStamp1 >= HoraInicio & GPS01_txt$tStamp1 <= HoraFinal, "Y","N"))
+GPS01<-subset(GPS01,GPS01$Tracking=='Y')
+```
+
+---
+
+
+## 3. Graficar
+Para los básicos de como realizar gráficos en R [ve aqui](https://miriamll.github.io/Curso_CIAD/Clase2#1).
+
+---
+
+### 3.1. Trayectorias individuales
+
+Para graficar un solo individuo.
+```{r, out.width="40%"}
+ggplot(data = GPS01, aes(x = Latitude, y = Longitude)) +
+  geom_path()+
+  theme_bw()
+```
+
+---
+
+### 3.2. Trayectorias grupales
+Para graficar varios individuos
+```{r, out.width="40%"}
+ggplot(data = Todos_GPS, aes(x = Latitude, y = Longitude)) +
+  geom_path(aes(group = IDs, color = IDs))+
+  theme_bw()
 ```
 
 
 ---
 
-# Parte 3
-## Graficar trayectorios
+## 5. Exportar 
+
+Seleccionar la carpeta.
+```{r}
+library(here)
+DatosFolder<-here::here("01Datos")
+```
+
+Exportar el nuevo data frame. 
+```{r}
+write_csv(
+  Todos_GPS,
+  file=paste0(DatosFolder,'/Todos_GPS.csv'))
+```
 
 ---
 
-# Parte 4
-## Exportar nuestro nuevo data frame
+## 6. Contacto
 
----
+- Para dudas:  
+Escríbeme a miriamjlerma@gmail.com
+
+- Para créditos:
+Lerma M, 2021. Importar datos de GPS. Proximamente con zenodo. 
