@@ -266,7 +266,7 @@ ggplot(data = Todos_GPS, aes(x = Latitude, y = Longitude)) +
 
 ---
 
-## 5. Exportar 
+## 4. Exportar 
 
 Seleccionar la carpeta.
 ```{r}
@@ -283,7 +283,7 @@ write_csv(
 
 ---
 
-## 6. Contacto
+## 5. Contacto
 
 - Para dudas, comentarios y sugerencias:  
 Escríbeme a miriamjlerma@gmail.com
