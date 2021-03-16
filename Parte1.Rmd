@@ -104,7 +104,7 @@ head(GPS01_txt)
 
 ### 1.4. Formato xlsx
 
-Hay que cargar la librería readxl
+Para importar datos desde excel, hay que cargar la librería readxl
 ```{r, eval=FALSE}
 library("readxl")
 ```
@@ -290,3 +290,6 @@ Escríbeme a miriamjlerma@gmail.com
 
 - Para créditos:
 Lerma M, 2021. Importar datos de GPS. Proximamente con zenodo. 
+
+- Los datos de prueba vienen de la publicación:
+Lerma M, Dehnhard N, Luna-Jorquera G, Voigt CC, Garthe SS (2020) Breeding stage, not sex, affects foraging characteristics in masked boobies at Rapa Nui. Behavioral ecology and sociobiology 74: 149 [OpenAccess](https://link.springer.com/article/10.1007/s00265-020-02921-1)
