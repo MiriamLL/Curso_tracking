@@ -285,7 +285,7 @@ write_csv(
 
 ## 6. Contacto
 
-- Para dudas:  
+- Para dudas, comentarios y sugerencias:  
 Escríbeme a miriamjlerma@gmail.com
 
 - Para créditos:
