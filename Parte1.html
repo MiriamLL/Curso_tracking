@@ -40,14 +40,20 @@ En esta presentación verán como:
 ## Ustedes
 
 - Quieren importar sus datos de GPS a R y limpiarlos. &lt;br&gt;
-- Tienen conocimientos básicos de R, si no te recomiendo [empezar aqui](https://miriamll.github.io/Curso_CIAD/Clase1Parte2). &lt;br&gt;
+- Tienen conocimientos básicos de R, si no te recomiendo [empezar por aquí](https://miriamlerma.netlify.app/posts/2021-03-01-introar/). &lt;br&gt;
   
 ---
 
+class:center,middle
+
 ## 1. Importar datos a R
+
+Para esta parte necesitas saber instalar paquetes, si necesitas recordar como hacerlo, te recomiendo [empezar por aquí](https://miriamll.github.io/Curso_CIAD/Clase1Parte2).
+
+---
+
 ### 1.2. Paquetes
 
-Para esta parte necesitas saber instalar paquetes, si necesitas recordar como hacerlo, te recomiendo [empezar por aqui](https://miriamll.github.io/Curso_CIAD/Clase1Parte2).
 
 Cargar el paquete tidyverse
 
@@ -79,7 +85,7 @@ Import Dataset.
 ---
 ### 1.3. Formato txt
 
-La funcion read_tvs se usa cuando los valores están separados por **tabs/espacios**.  
+Para cargarlos con código de R, la función read_tvs se usa cuando los valores están separados por **tabs/espacios**.  
 
 
 ```r
@@ -130,6 +136,17 @@ head(GPS01_excel)
 
 Para cargar múltiples archivos, te recomiendo definir la carpeta donde tienes tus archivos y pedirle a R que te los enliste.
 
+Define tu carpeta.
+
+```r
+# Toda la ruta de la carpeta
+DatosFolder&lt;-'C://Users//Lerma//Documents//4Cursos//1Bobos//ClaseTracking//01Datos'
+# Ruta relativa
+DatosFolder&lt;-here("01Datos")
+```
+
+Enlista tus archivos.
+
 ```r
 Lista_GPS &lt;- list.files(DatosFolder,pattern="*.csv",full.names=TRUE)
 ```
@@ -146,9 +163,13 @@ Lista_GPS &lt;- lapply(Lista_GPS,read_csv)
 ```
 Si quieres descargar los archivos de prueba [ve aqui](https://github.com/MiriamLL/Curso_tracking/tree/main/01Datos).
 
+Para poder identificar los diferentes GPS, antes de unir todo tus datos deberás agregar un ID.
+
 ---
 
 ### 1.6. Agregar ID
+
+Para agregar ID en tus data frames, existen varias opciones, aquí enlisto tres de ellas.
 
 **Opción 1:**  
 Uno por uno
@@ -218,7 +239,7 @@ Esta función te permite unirlos.
 ```r
 Todos_GPS &lt;- do.call("rbind",Lista_GPS)
 ```
-Pero **ojo** el numero de columnas y nombres de las columnas debe ser lo mismo.
+Pero **ojo** el numero de columnas y nombres de las columnas debe ser el mismo.
 
 
 ```r
@@ -226,7 +247,7 @@ Todos_GPS
 ```
 
 ```
-## # A tibble: 135,720 x 5
+## # A tibble: 93,960 x 5
 ##    Latitude Longitude DateGMT    TimeGMT  IDs  
 ##       &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;      &lt;time&gt;   &lt;chr&gt;
 ##  1    -27.2     -109. 02/11/2017 17:05:30 ID01 
@@ -239,15 +260,20 @@ Todos_GPS
 ##  8    -27.2     -109. 02/11/2017 17:34:49 ID01 
 ##  9    -27.2     -109. 02/11/2017 17:39:01 ID01 
 ## 10    -27.2     -109. 02/11/2017 17:43:09 ID01 
-## # ... with 135,710 more rows
+## # ... with 93,950 more rows
 ```
 
 
 ---
 
+class:center,middle
 
 ## 2. Recortar
-### 2.1. Eliminar periodos dentro de nuestros datos
+Para esta parte puedes necesitar algunos básicos de como manipular data frames en R, si necesitas más información [ve aquí](https://miriamll.github.io/Curso_CIAD/Clase3Parte2#1).
+
+---
+
+### 2.1. Hora inicio y hora final.
 
 Supongamos que el GPS01, se coloco a las 18:10:00 del 02/11/2017 y se retiro a las 14:10:00 el 05/11/2017.
 
@@ -264,24 +290,51 @@ HoraFinal&lt;-'05/11/2017 14:10:00'
 HoraFinal&lt;- as.POSIXct(strptime(HoraFinal, "%d/%m/%Y %H:%M:%S"), "GMT") 
 ```
 
-Después se puede seleccionar solo el periodo que nos interesa.
+Se deben unir las columnas de fecha y tiempo en nuestros datos de GPS y convertir al formato POSIXct para que R entienda que son hora y día.
 
 ```r
 GPS01_txt$tStamp&lt;-paste(GPS01_txt$DateGMT,GPS01_txt$TimeGMT)
-GPS01_txt$tStamp1&lt;-as.POSIXct(strptime(GPS01_txt$tStamp, "%d/%m/%Y %H:%M:%S"),  "GMT") 
-GPS01&lt;-mutate(GPS01_txt, Tracking = ifelse(GPS01_txt$tStamp1 &gt;= HoraInicio &amp; GPS01_txt$tStamp1 &lt;= HoraFinal, "Y","N"))
-GPS01&lt;-subset(GPS01,GPS01$Tracking=='Y')
+GPS01_txt$tStamp1&lt;-as.POSIXct(strptime(GPS01_txt$tStamp, "%d/%m/%Y %H:%M:%S"),  "GMT")
 ```
 
 ---
 
+### 2.2. Eliminar periodos dentro de nuestros datos
 
-## 3. Graficar
-Para los básicos de como realizar gráficos en R [ve aqui](https://miriamll.github.io/Curso_CIAD/Clase2#1).
+Después se puede seleccionar solo el periodo que nos interesa.  
+Yo utilice la función mutate, que agregara una columna con Y o N,  siendo _N_ el periodo que queremos eliminar.  
+No es necesario crear esa columna, se puede usar **filter** directo pero a mí me gusta verificar primero.  
+
+```r
+GPS01&lt;-mutate(GPS01_txt, Tracking = ifelse(GPS01_txt$tStamp1 &gt;= HoraInicio &amp; GPS01_txt$tStamp1 &lt;= HoraFinal, "Y","N"))
+```
+
+Después filtre solo el periodo que me interesa. 
+
+**Opción 1**: usando la función **filter**
+
+```r
+GPS01&lt;-GPS01 %&gt;% 
+  filter(Tracking=='Y')
+```
+
+**Opción 2**: usando la función **subset**
+
+```r
+GPS01&lt;-subset(GPS01,GPS01$Tracking=='Y')
+```
+Nota que el numero de observaciones se reduce.  
 
 ---
 
-### 3.1. Trayectorias individuales
+class:center,middle
+
+## 3. Graficar
+Para los básicos de como realizar gráficos en R [ve aquí](https://miriamll.github.io/Curso_CIAD/Clase2#1).
+
+---
+
+### 3.1. Trayectorias individuo
 
 Para graficar un solo individuo.
 
@@ -291,20 +344,20 @@ ggplot(data = GPS01, aes(x = Latitude, y = Longitude)) +
   theme_bw()
 ```
 
-&lt;img src="Parte1_files/figure-html/unnamed-chunk-25-1.png" width="40%" /&gt;
+&lt;img src="Parte1_files/figure-html/unnamed-chunk-29-1.png" width="40%" /&gt;
 
 ---
 
-### 3.2. Trayectorias grupales
+### 3.2. Trayectorias individuales
 Para graficar varios individuos
 
 ```r
 ggplot(data = Todos_GPS, aes(x = Latitude, y = Longitude)) +
-  geom_path(aes(group = IDs, color = IDs))+
+  geom_path(aes(group = IDs, color = IDs),size=2)+
   theme_bw()
 ```
 
-&lt;img src="Parte1_files/figure-html/unnamed-chunk-26-1.png" width="40%" /&gt;
+&lt;img src="Parte1_files/figure-html/unnamed-chunk-30-1.png" width="40%" /&gt;
 
 
 ---
@@ -333,8 +386,10 @@ write_csv(
 - Para dudas, comentarios y sugerencias:  
 Escríbeme a miriamjlerma@gmail.com
 
-- Para créditos:
-Lerma M, 2021. Importar datos de GPS. Proximamente con zenodo. 
+- Este material esta libre y se encuentra en mi [github](https://github.com/MiriamLL/Curso_tracking/blob/main/Parte1.Rmd).
+
+- Si quieres dar créditos puedes usar:
+Lerma M, 2021. Importar datos de GPS. Próximamente con zenodo. 
 
 - Los datos de prueba vienen de la publicación:
 Lerma M, Dehnhard N, Luna-Jorquera G, Voigt CC, Garthe SS (2020) Breeding stage, not sex, affects foraging characteristics in masked boobies at Rapa Nui. Behavioral ecology and sociobiology 74: 149 [OpenAccess](https://link.springer.com/article/10.1007/s00265-020-02921-1)
