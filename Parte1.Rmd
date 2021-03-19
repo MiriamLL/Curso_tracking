@@ -154,7 +154,7 @@ Lista_GPS <- lapply(Lista_GPS,read_csv)
 ```
 Si quieres descargar los archivos de prueba [ve aqui](https://github.com/MiriamLL/Curso_tracking/tree/main/01Datos).
 
-Para poder identificar los diferentes GPS, antes de unir todo tus datos deberás agregar un ID.
+Para poder identificar los diferentes GPS, antes de unir todos tus datos deberás agregar un ID.
 
 ---
 
@@ -308,10 +308,10 @@ ggplot(data = GPS01, aes(x = Latitude, y = Longitude)) +
 Para graficar varios individuos
 ```{r, out.width="40%"}
 ggplot(data = Todos_GPS, aes(x = Latitude, y = Longitude)) +
-  geom_path(aes(group = IDs, color = IDs),size=2)+
+  geom_path(aes(group = IDs, color = IDs))+
   theme_bw()
 ```
-
+_Nota_ es posible que en la presentacion las lineas se vean en color gris, pero en tu Rstudio mostrara los diferentes colores.
 
 ---
 
@@ -344,3 +344,13 @@ Lerma M, 2021. Importar datos de GPS. Próximamente con zenodo.
 
 - Los datos de prueba vienen de la publicación:
 Lerma M, Dehnhard N, Luna-Jorquera G, Voigt CC, Garthe SS (2020) Breeding stage, not sex, affects foraging characteristics in masked boobies at Rapa Nui. Behavioral ecology and sociobiology 74: 149 [OpenAccess](https://link.springer.com/article/10.1007/s00265-020-02921-1)
+
+
+
+
+.center[
+```{r, echo=FALSE}
+library(fontawesome)
+```
+`r fa("home", fill = "black")`[Volver ](https://miriamlerma.netlify.app/posts/2021-03-16-biologging/)
+]
