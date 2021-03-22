@@ -5,7 +5,7 @@ author: "Miriam Lerma"
 date: "Marzo 2021"
 output:
   xaringan::moon_reader:
-    css: xaringan-themer.css
+    css: Parte1.css
     seal: false
     nature:
       highlightStyle: github
@@ -13,19 +13,6 @@ output:
       countIncrementalSlides: true
       
 ---
-
-```{r xaringan-themer, include=FALSE, warning=FALSE}
-library(xaringanthemer)
-style_mono_accent(
-  base_color = "#22577a",
-  header_font_google = google_font("Josefin Sans"),
-  text_font_google   = google_font("Josefin Sans"),
-  code_font_google   = google_font("Roboto Mono"),
-  background_color = "#faf9f9",
-  text_color = "#22577a",
-  code_inline_background_color = '#83c5be'
-)
-```
 
 ```{r include = FALSE}
 #Paquetes
