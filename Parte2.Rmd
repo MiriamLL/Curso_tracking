@@ -51,7 +51,7 @@ library(ggplot2)
 ## Ustedes
 
 - Tienes una base de datos con datos de GPS <br>
-- Tienen conocimientos básicos de R, si no te recomiendo [empezar por aquí](https://miriamlerma.netlify.app/posts/2021-03-01-introar/) <br>
+- Tienen conocimientos básicos de R, si no te recomiendo [`r fa("external-link-alt", fill = "#52b788")`empezar por aquí](https://miriamlerma.netlify.app/posts/2021-03-01-introar/) <br>
 - Necesitan corregir la hora de sus GPSs
   
 ---
@@ -62,7 +62,7 @@ class:center,middle
 
 ## 1. Importar datos a R
 
-Para esta parte necesitas saber cargar tus datos, si necesitas recordar como hacerlo, te recomiendo [empezar por aquí](https://miriamll.github.io/Curso_tracking/Parte1).
+Para esta parte necesitas saber cargar tus datos, si necesitas recordar como hacerlo, te recomiendo [`r fa("external-link-alt", fill = "#52b788")`empezar por aquí](https://miriamll.github.io/Curso_tracking/Parte1).
 
 ---
 
@@ -94,7 +94,7 @@ Esta función sirve para leer todos los archivos.
 ```{r, message=FALSE}
 Lista_GPS <- lapply(Lista_GPS,read_csv)
 ```
-Si quieres descargar los archivos de prueba [ve aquí](https://github.com/MiriamLL/Curso_tracking/tree/main/01Datos).
+Si quieres descargar los archivos de prueba [`r fa("external-link-alt", fill = "#52b788")`ve aquí](https://github.com/MiriamLL/Curso_tracking/tree/main/01Datos).
 
 Para poder identificar los diferentes GPS, antes de unir todos tus datos deberás agregar un ID.
 
@@ -133,7 +133,7 @@ class:center,middle
 
 <h1>`r fa("search", fill = "#2a9d8f")`
 ## 2. Revisar el día y la hora
-Para esta parte puedes necesitar algunos básicos de como manipular data frames en R, si necesitas más información [ve aquí](https://miriamll.github.io/Curso_CIAD/Clase3Parte2#1).
+Para esta parte puedes necesitar algunos básicos de como manipular data frames en R, si necesitas más información [`r fa("external-link-alt", fill = "#52b788")`ve aquí](https://miriamll.github.io/Curso_CIAD/Clase3Parte2#1).
 
 ---
 
@@ -224,7 +224,7 @@ class: center, middle
 
 <h1>`r fa("clock", fill = "#2a9d8f")`
 ## 3. Corregir la hora
-Para esta parte puedes necesitar algunos básicos de como manipular data frames en R, si necesitas más información [ve aquí](https://miriamll.github.io/Curso_CIAD/Clase3Parte2#1).
+Para esta parte puedes necesitar algunos básicos de como manipular data frames en R, si necesitas más información [`r fa("external-link-alt", fill = "#52b788")`ve aquí](https://miriamll.github.io/Curso_CIAD/Clase3Parte2#1).
 
 ---
 
@@ -358,7 +358,7 @@ OlsonNames()
 ```
 Te van a aparecer muchos resultados.
 
-Otra opción es ver la [lista en Wikipedia](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).
+Otra opción es ver la [`r fa("external-link-alt", fill = "#52b788")`lista en Wikipedia](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).
 
 
 
@@ -369,7 +369,7 @@ class: center, middle
 <h1>`r fa("file-export", fill = "#2a9d8f")`
 
 # 4. Exportar 
-Para esta parte necesitas saber cargar tus datos, si necesitas recordar como hacerlo, te recomiendo [empezar por aquí](https://miriamll.github.io/Curso_CIAD/Clase3Parte2#54).
+Para esta parte necesitas saber cargar tus datos, si necesitas recordar como hacerlo, te recomiendo [`r fa("external-link-alt", fill = "#52b788")`empezar por aquí](https://miriamll.github.io/Curso_CIAD/Clase3Parte2#54).
 
 ---
 
@@ -404,13 +404,13 @@ Para dudas, comentarios y sugerencias:
 - Escríbeme a miriamjlerma@gmail.com
 
 Este material esta accesible y se encuentra en 
-- mi [github](https://github.com/MiriamLL/Curso_tracking/).
+- mi [`r fa("external-link-alt", fill = "#52b788")`github](https://github.com/MiriamLL/Curso_tracking/).
 
 <br>
 
 Si quieres dar créditos puedes usar:
 - Lerma M, 2021. Clase biologging. Próximamente con zenodo. 
-- Lerma M, Dehnhard N, Luna-Jorquera G, Voigt CC, Garthe SS (2020) Breeding stage, not sex, affects foraging characteristics in masked boobies at Rapa Nui. Behavioral ecology and sociobiology 74: 149 [OpenAccess](https://link.springer.com/article/10.1007/s00265-020-02921-1)
+- Lerma M, Dehnhard N, Luna-Jorquera G, Voigt CC, Garthe SS (2020) Breeding stage, not sex, affects foraging characteristics in masked boobies at Rapa Nui. Behavioral ecology and sociobiology 74: 149 [`r fa("external-link-alt", fill = "#52b788")`OpenAccess](https://link.springer.com/article/10.1007/s00265-020-02921-1)<br>
 Los datos de prueba vienen de esa publicación. 
 
 <br>

@@ -42,8 +42,8 @@ En esta presentación verán como:
 
 ## Ustedes
 
-- Quieren importar sus datos de GPS a R y limpiarlos. &lt;br&gt;
-- Tienen conocimientos básicos de R, si no te recomiendo [empezar por aquí](https://miriamlerma.netlify.app/posts/2021-03-01-introar/). &lt;br&gt;
+- Quieren importar sus datos de GPS a R y limpiarlos &lt;br&gt;
+- Tienen conocimientos básicos de R, si no te recomiendo [&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#22577a;" viewBox="0 0 576 512"&gt;&lt;path d="M576 24v127.984c0 21.461-25.96 31.98-40.971 16.971l-35.707-35.709-243.523 243.523c-9.373 9.373-24.568 9.373-33.941 0l-22.627-22.627c-9.373-9.373-9.373-24.569 0-33.941L442.756 76.676l-35.703-35.705C391.982 25.9 402.656 0 424.024 0H552c13.255 0 24 10.745 24 24zM407.029 270.794l-16 16A23.999 23.999 0 0 0 384 303.765V448H64V128h264a24.003 24.003 0 0 0 16.97-7.029l16-16C376.089 89.851 365.381 64 344 64H48C21.49 64 0 85.49 0 112v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48V287.764c0-21.382-25.852-32.09-40.971-16.97z"/&gt;&lt;/svg&gt;empezar por aquí ](https://miriamlerma.netlify.app/posts/2021-03-01-introar/) &lt;br&gt;
   
 ---
 
@@ -53,7 +53,7 @@ class:center,middle
 
 ## 1. Importar datos a R
 
-Para esta parte necesitas saber instalar paquetes, si necesitas recordar como hacerlo, te recomiendo [empezar por aquí](https://miriamll.github.io/Curso_CIAD/Clase1Parte2).
+Para esta parte necesitas saber instalar paquetes, si necesitas recordar como hacerlo, te recomiendo [&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#22577a;" viewBox="0 0 576 512"&gt;&lt;path d="M576 24v127.984c0 21.461-25.96 31.98-40.971 16.971l-35.707-35.709-243.523 243.523c-9.373 9.373-24.568 9.373-33.941 0l-22.627-22.627c-9.373-9.373-9.373-24.569 0-33.941L442.756 76.676l-35.703-35.705C391.982 25.9 402.656 0 424.024 0H552c13.255 0 24 10.745 24 24zM407.029 270.794l-16 16A23.999 23.999 0 0 0 384 303.765V448H64V128h264a24.003 24.003 0 0 0 16.97-7.029l16-16C376.089 89.851 365.381 64 344 64H48C21.49 64 0 85.49 0 112v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48V287.764c0-21.382-25.852-32.09-40.971-16.97z"/&gt;&lt;/svg&gt;empezar por aquí](https://miriamll.github.io/Curso_CIAD/Clase1Parte2).
 
 ---
 
@@ -69,7 +69,7 @@ library(tidyverse)
 library(here)
 ```
 
-Define carpeta ya sea con ruta relativa (usando here) o absoluta (poniendo toda la ruta), si necesitas mas información de como escribir tus rutas [ve aqui](https://miriamll.github.io/Curso_CIAD/Clase4Parte1#1).
+Define carpeta ya sea con ruta relativa (usando here) o absoluta (poniendo toda la ruta), si necesitas mas información de como escribir tus rutas [&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#22577a;" viewBox="0 0 576 512"&gt;&lt;path d="M576 24v127.984c0 21.461-25.96 31.98-40.971 16.971l-35.707-35.709-243.523 243.523c-9.373 9.373-24.568 9.373-33.941 0l-22.627-22.627c-9.373-9.373-9.373-24.569 0-33.941L442.756 76.676l-35.703-35.705C391.982 25.9 402.656 0 424.024 0H552c13.255 0 24 10.745 24 24zM407.029 270.794l-16 16A23.999 23.999 0 0 0 384 303.765V448H64V128h264a24.003 24.003 0 0 0 16.97-7.029l16-16C376.089 89.851 365.381 64 344 64H48C21.49 64 0 85.49 0 112v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48V287.764c0-21.382-25.852-32.09-40.971-16.97z"/&gt;&lt;/svg&gt;ve aquí](https://miriamll.github.io/Curso_CIAD/Clase4Parte1#1).
 
 ```r
 DatosFolder&lt;-'C://Users//Lerma//Documents//4Cursos//1Bobos//ClaseTracking//01Datos' #tienes que cambiar la ruta por la ruta donde descargaste tus archivos
@@ -166,7 +166,7 @@ Esta función sirve para leer todos los archivos.
 ```r
 Lista_GPS &lt;- lapply(Lista_GPS,read_csv)
 ```
-Si quieres descargar los archivos de prueba [ve aqui](https://github.com/MiriamLL/Curso_tracking/tree/main/01Datos).
+Si quieres descargar los archivos de prueba [&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#22577a;" viewBox="0 0 576 512"&gt;&lt;path d="M576 24v127.984c0 21.461-25.96 31.98-40.971 16.971l-35.707-35.709-243.523 243.523c-9.373 9.373-24.568 9.373-33.941 0l-22.627-22.627c-9.373-9.373-9.373-24.569 0-33.941L442.756 76.676l-35.703-35.705C391.982 25.9 402.656 0 424.024 0H552c13.255 0 24 10.745 24 24zM407.029 270.794l-16 16A23.999 23.999 0 0 0 384 303.765V448H64V128h264a24.003 24.003 0 0 0 16.97-7.029l16-16C376.089 89.851 365.381 64 344 64H48C21.49 64 0 85.49 0 112v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48V287.764c0-21.382-25.852-32.09-40.971-16.97z"/&gt;&lt;/svg&gt;ve aquí](https://github.com/MiriamLL/Curso_tracking/tree/main/01Datos).
 
 Para poder identificar los diferentes GPS, antes de unir todos tus datos deberás agregar un ID.
 
@@ -252,7 +252,7 @@ Todos_GPS
 ```
 
 ```
-## # A tibble: 167,040 x 5
+## # A tibble: 208,800 x 5
 ##    Latitude Longitude DateGMT    TimeGMT  IDs  
 ##       &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;      &lt;time&gt;   &lt;chr&gt;
 ##  1    -27.2     -109. 02/11/2017 17:05:30 ID01 
@@ -265,7 +265,7 @@ Todos_GPS
 ##  8    -27.2     -109. 02/11/2017 17:34:49 ID01 
 ##  9    -27.2     -109. 02/11/2017 17:39:01 ID01 
 ## 10    -27.2     -109. 02/11/2017 17:43:09 ID01 
-## # ... with 167,030 more rows
+## # ... with 208,790 more rows
 ```
 
 
@@ -276,7 +276,7 @@ class:center,middle
 &lt;h1&gt;&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#22577a;" viewBox="0 0 448 512"&gt;&lt;path d="M278.06 256L444.48 89.57c4.69-4.69 4.69-12.29 0-16.97-32.8-32.8-85.99-32.8-118.79 0L210.18 188.12l-24.86-24.86c4.31-10.92 6.68-22.81 6.68-35.26 0-53.02-42.98-96-96-96S0 74.98 0 128s42.98 96 96 96c4.54 0 8.99-.32 13.36-.93L142.29 256l-32.93 32.93c-4.37-.61-8.83-.93-13.36-.93-53.02 0-96 42.98-96 96s42.98 96 96 96 96-42.98 96-96c0-12.45-2.37-24.34-6.68-35.26l24.86-24.86L325.69 439.4c32.8 32.8 85.99 32.8 118.79 0 4.69-4.68 4.69-12.28 0-16.97L278.06 256zM96 160c-17.64 0-32-14.36-32-32s14.36-32 32-32 32 14.36 32 32-14.36 32-32 32zm0 256c-17.64 0-32-14.36-32-32s14.36-32 32-32 32 14.36 32 32-14.36 32-32 32z"/&gt;&lt;/svg&gt;
 
 ## 2. Recortar
-Para esta parte puedes necesitar algunos básicos de como manipular data frames en R, si necesitas más información [ve aquí](https://miriamll.github.io/Curso_CIAD/Clase3Parte2#1).
+Para esta parte puedes necesitar algunos básicos de como manipular data frames en R, si necesitas más información [&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#22577a;" viewBox="0 0 576 512"&gt;&lt;path d="M576 24v127.984c0 21.461-25.96 31.98-40.971 16.971l-35.707-35.709-243.523 243.523c-9.373 9.373-24.568 9.373-33.941 0l-22.627-22.627c-9.373-9.373-9.373-24.569 0-33.941L442.756 76.676l-35.703-35.705C391.982 25.9 402.656 0 424.024 0H552c13.255 0 24 10.745 24 24zM407.029 270.794l-16 16A23.999 23.999 0 0 0 384 303.765V448H64V128h264a24.003 24.003 0 0 0 16.97-7.029l16-16C376.089 89.851 365.381 64 344 64H48C21.49 64 0 85.49 0 112v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48V287.764c0-21.382-25.852-32.09-40.971-16.97z"/&gt;&lt;/svg&gt;ve aquí](https://miriamll.github.io/Curso_CIAD/Clase3Parte2#1).
 
 ---
 
@@ -339,7 +339,7 @@ class:center,middle
 &lt;h1&gt;&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#22577a;" viewBox="0 0 512 512"&gt;&lt;path d="M167.02 309.34c-40.12 2.58-76.53 17.86-97.19 72.3-2.35 6.21-8 9.98-14.59 9.98-11.11 0-45.46-27.67-55.25-34.35C0 439.62 37.93 512 128 512c75.86 0 128-43.77 128-120.19 0-3.11-.65-6.08-.97-9.13l-88.01-73.34zM457.89 0c-15.16 0-29.37 6.71-40.21 16.45C213.27 199.05 192 203.34 192 257.09c0 13.7 3.25 26.76 8.73 38.7l63.82 53.18c7.21 1.8 14.64 3.03 22.39 3.03 62.11 0 98.11-45.47 211.16-256.46 7.38-14.35 13.9-29.85 13.9-45.99C512 20.64 486 0 457.89 0z"/&gt;&lt;/svg&gt;
 
 ## 3. Graficar
-Para recordar los básicos de como realizar gráficos en R [ve aquí](https://miriamll.github.io/Curso_CIAD/Clase2#1).
+Para recordar los básicos de como realizar gráficos en R [&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#22577a;" viewBox="0 0 576 512"&gt;&lt;path d="M576 24v127.984c0 21.461-25.96 31.98-40.971 16.971l-35.707-35.709-243.523 243.523c-9.373 9.373-24.568 9.373-33.941 0l-22.627-22.627c-9.373-9.373-9.373-24.569 0-33.941L442.756 76.676l-35.703-35.705C391.982 25.9 402.656 0 424.024 0H552c13.255 0 24 10.745 24 24zM407.029 270.794l-16 16A23.999 23.999 0 0 0 384 303.765V448H64V128h264a24.003 24.003 0 0 0 16.97-7.029l16-16C376.089 89.851 365.381 64 344 64H48C21.49 64 0 85.49 0 112v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48V287.764c0-21.382-25.852-32.09-40.971-16.97z"/&gt;&lt;/svg&gt;ve aquí](https://miriamll.github.io/Curso_CIAD/Clase2#1).
 
 ---
 
@@ -377,7 +377,7 @@ class: center, middle
 &lt;h1&gt;&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#22577a;" viewBox="0 0 576 512"&gt;&lt;path d="M384 121.9c0-6.3-2.5-12.4-7-16.9L279.1 7c-4.5-4.5-10.6-7-17-7H256v128h128zM571 308l-95.7-96.4c-10.1-10.1-27.4-3-27.4 11.3V288h-64v64h64v65.2c0 14.3 17.3 21.4 27.4 11.3L571 332c6.6-6.6 6.6-17.4 0-24zm-379 28v-32c0-8.8 7.2-16 16-16h176V160H248c-13.2 0-24-10.8-24-24V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V352H208c-8.8 0-16-7.2-16-16z"/&gt;&lt;/svg&gt;
 
 # 4. Exportar 
-Para esta parte necesitas saber cargar tus datos, si necesitas recordar como hacerlo, te recomiendo [empezar por aquí](https://miriamll.github.io/Curso_CIAD/Clase3Parte2#54).
+Para esta parte necesitas saber cargar tus datos, si necesitas recordar como hacerlo, te recomiendo [&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#22577a;" viewBox="0 0 576 512"&gt;&lt;path d="M576 24v127.984c0 21.461-25.96 31.98-40.971 16.971l-35.707-35.709-243.523 243.523c-9.373 9.373-24.568 9.373-33.941 0l-22.627-22.627c-9.373-9.373-9.373-24.569 0-33.941L442.756 76.676l-35.703-35.705C391.982 25.9 402.656 0 424.024 0H552c13.255 0 24 10.745 24 24zM407.029 270.794l-16 16A23.999 23.999 0 0 0 384 303.765V448H64V128h264a24.003 24.003 0 0 0 16.97-7.029l16-16C376.089 89.851 365.381 64 344 64H48C21.49 64 0 85.49 0 112v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48V287.764c0-21.382-25.852-32.09-40.971-16.97z"/&gt;&lt;/svg&gt;empezar por aquí](https://miriamll.github.io/Curso_CIAD/Clase3Parte2#54).
 
 ---
 
@@ -405,14 +405,14 @@ write_csv(
 - Para dudas, comentarios y sugerencias:  
 Escríbeme a miriamjlerma@gmail.com
 
-- Este material esta accesible y se encuentra en mi [github](https://github.com/MiriamLL/Curso_tracking/).
+- Este material esta accesible y se encuentra en mi [&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#22577a;" viewBox="0 0 576 512"&gt;&lt;path d="M576 24v127.984c0 21.461-25.96 31.98-40.971 16.971l-35.707-35.709-243.523 243.523c-9.373 9.373-24.568 9.373-33.941 0l-22.627-22.627c-9.373-9.373-9.373-24.569 0-33.941L442.756 76.676l-35.703-35.705C391.982 25.9 402.656 0 424.024 0H552c13.255 0 24 10.745 24 24zM407.029 270.794l-16 16A23.999 23.999 0 0 0 384 303.765V448H64V128h264a24.003 24.003 0 0 0 16.97-7.029l16-16C376.089 89.851 365.381 64 344 64H48C21.49 64 0 85.49 0 112v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48V287.764c0-21.382-25.852-32.09-40.971-16.97z"/&gt;&lt;/svg&gt;github](https://github.com/MiriamLL/Curso_tracking/).
 
 &lt;br&gt;
 
 Si quieres dar créditos puedes usar:
 - Lerma M, 2021. Clase biologging. Próximamente con zenodo. 
-- Lerma M, Dehnhard N, Luna-Jorquera G, Voigt CC, Garthe SS (2020) Breeding stage, not sex, affects foraging characteristics in masked boobies at Rapa Nui. Behavioral ecology and sociobiology 74: 149 [OpenAccess](https://link.springer.com/article/10.1007/s00265-020-02921-1)
-Los datos de prueba vienen de esa publicación. 
+- Lerma M, Dehnhard N, Luna-Jorquera G, Voigt CC, Garthe SS (2020) Breeding stage, not sex, affects foraging characteristics in masked boobies at Rapa Nui. Behavioral ecology and sociobiology 74: 149 [&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#22577a;" viewBox="0 0 576 512"&gt;&lt;path d="M576 24v127.984c0 21.461-25.96 31.98-40.971 16.971l-35.707-35.709-243.523 243.523c-9.373 9.373-24.568 9.373-33.941 0l-22.627-22.627c-9.373-9.373-9.373-24.569 0-33.941L442.756 76.676l-35.703-35.705C391.982 25.9 402.656 0 424.024 0H552c13.255 0 24 10.745 24 24zM407.029 270.794l-16 16A23.999 23.999 0 0 0 384 303.765V448H64V128h264a24.003 24.003 0 0 0 16.97-7.029l16-16C376.089 89.851 365.381 64 344 64H48C21.49 64 0 85.49 0 112v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48V287.764c0-21.382-25.852-32.09-40.971-16.97z"/&gt;&lt;/svg&gt;OpenAccess](https://link.springer.com/article/10.1007/s00265-020-02921-1). &lt;br&gt;
+Los datos de prueba vienen de esta publicación. 
 
 &lt;br&gt;
 &lt;br&gt;
