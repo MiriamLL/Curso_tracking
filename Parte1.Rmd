@@ -1,6 +1,6 @@
 ---
 title: "Parte 1"
-subtitle: "Importar datos de GPS<br>"
+subtitle: "Importar datos <br>de GPS"
 author: "Miriam Lerma"
 date: "Marzo 2021"
 output:
@@ -20,7 +20,7 @@ style_mono_accent(
   base_color = "#22577a",
   header_font_google = google_font("Josefin Sans"),
   text_font_google   = google_font("Josefin Sans"),
-  code_font_google   = google_font("Fira Mono"),
+  code_font_google   = google_font("Roboto Mono"),
   background_color = "#faf9f9",
   text_color = "#22577a",
   code_inline_background_color = '#83c5be'

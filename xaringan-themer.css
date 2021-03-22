@@ -20,7 +20,7 @@
  * ------------------------------------------------------- */
 @import url(https://fonts.googleapis.com/css?family=Josefin+Sans&display=swap);
 @import url(https://fonts.googleapis.com/css?family=Josefin+Sans&display=swap);
-@import url(https://fonts.googleapis.com/css?family=Fira+Mono&display=swap);
+@import url(https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap);
 
 
 :root {
@@ -32,7 +32,7 @@
   --header-font-family: 'Josefin Sans';
   --header-font-is-google: 1;
   --header-font-family-fallback: Georgia, serif;
-  --code-font-family: 'Fira Mono';
+  --code-font-family: 'Roboto Mono';
   --code-font-is-google: 1;
   --base-font-size: 20px;
   --text-font-size: 1rem;
@@ -43,21 +43,21 @@
   --header-h3-font-size: 1.75rem;
 
   /* Colors */
-  --text-color: #40916c;
-  --header-color: #2a9d8f;
+  --text-color: #22577a;
+  --header-color: #22577a;
   --background-color: #faf9f9;
-  --link-color: #2a9d8f;
-  --text-bold-color: #2a9d8f;
+  --link-color: #22577a;
+  --text-bold-color: #22577a;
   --code-highlight-color: rgba(255,255,0,0.5);
   --inverse-text-color: #FFFFFF;
-  --inverse-background-color: #2a9d8f;
+  --inverse-background-color: #22577a;
   --inverse-header-color: #FFFFFF;
-  --inverse-link-color: #2a9d8f;
-  --title-slide-background-color: #2a9d8f;
+  --inverse-link-color: #22577a;
+  --title-slide-background-color: #22577a;
   --title-slide-text-color: #FFFFFF;
-  --header-background-color: #2a9d8f;
+  --header-background-color: #22577a;
   --header-background-text-color: #faf9f9;
-  --base: #2a9d8f;
+  --base: #22577a;
   --white: #FFFFFF;
   --black: #272822;
 }
@@ -100,12 +100,12 @@ h1, h2, h3 {
 }
 .remark-inline-code {
   font-size: var(--code-inline-font-size);
-  color: #2a9d8f;
+  color: #22577a;
   background-color: #83c5be;
   padding: 2px;
 }
 .remark-slide-number {
-  color: #2a9d8f;
+  color: #22577a;
   opacity: 1;
   font-size: 0.9em;
 }
@@ -150,10 +150,10 @@ a, a > code {
   float: left;
 }
 .left-column h2, .left-column h3 {
-  color: #2a9d8f99;
+  color: #22577a99;
 }
 .left-column h2:last-of-type, .left-column h3:last-child {
-  color: #2a9d8f;
+  color: #22577a;
 }
 .right-column {
   width: 75%;
@@ -175,7 +175,7 @@ img, video, iframe {
   max-width: 100%;
 }
 blockquote {
-  border-left: solid 5px #2a9d8f80;
+  border-left: solid 5px #22577a80;
   padding-left: 1em;
 }
 .remark-slide table {
@@ -190,7 +190,7 @@ th, td {
   padding: 5px;
 }
 .remark-slide thead, .remark-slide tfoot, .remark-slide tr:nth-child(even) {
-  background: #D4EBE8;
+  background: #D2DDE4;
 }
 table.dataTable tbody {
   background-color: var(--background-color);
@@ -200,7 +200,7 @@ table.dataTable.display tbody tr.odd {
   background-color: var(--background-color);
 }
 table.dataTable.display tbody tr.even {
-  background-color: #D4EBE8;
+  background-color: #D2DDE4;
 }
 table.dataTable.hover tbody tr:hover, table.dataTable.display tbody tr:hover {
   background-color: rgba(255, 255, 255, 0.5);
