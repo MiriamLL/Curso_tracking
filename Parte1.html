@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <meta name="author" content="Miriam Lerma" />
     <script src="Parte1_files/header-attrs-2.6/header-attrs.js"></script>
-    <link href="Parte1_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link rel="stylesheet" href="xaringan-themer.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
@@ -13,15 +13,19 @@
 
 
 
+
+
 class: title-slide, inverse, middle, right
-background-image: url(https://images.unsplash.com/photo-1473163928189-364b2c4e1135?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&amp;ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=1350&amp;q=80)
-background-size: cover
+&lt;h1&gt;&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#e0e2db;" viewBox="0 0 576 512"&gt;&lt;path d="M0 117.66v346.32c0 11.32 11.43 19.06 21.94 14.86L160 416V32L20.12 87.95A32.006 32.006 0 0 0 0 117.66zM192 416l192 64V96L192 32v384zM554.06 33.16L416 96v384l139.88-55.95A31.996 31.996 0 0 0 576 394.34V48.02c0-11.32-11.43-19.06-21.94-14.86z"/&gt;&lt;/svg&gt; &lt;svg style="height:0.8em;top:.04em;position:relative;fill:#d2d4c8;" viewBox="0 0 576 512"&gt;&lt;path d="M0 117.66v346.32c0 11.32 11.43 19.06 21.94 14.86L160 416V32L20.12 87.95A32.006 32.006 0 0 0 0 117.66zM192 416l192 64V96L192 32v384zM554.06 33.16L416 96v384l139.88-55.95A31.996 31.996 0 0 0 576 394.34V48.02c0-11.32-11.43-19.06-21.94-14.86z"/&gt;&lt;/svg&gt; &lt;svg style="height:0.8em;top:.04em;position:relative;fill:#b8bdb5;" viewBox="0 0 576 512"&gt;&lt;path d="M0 117.66v346.32c0 11.32 11.43 19.06 21.94 14.86L160 416V32L20.12 87.95A32.006 32.006 0 0 0 0 117.66zM192 416l192 64V96L192 32v384zM554.06 33.16L416 96v384l139.88-55.95A31.996 31.996 0 0 0 576 394.34V48.02c0-11.32-11.43-19.06-21.94-14.86z"/&gt;&lt;/svg&gt; &lt;svg style="height:0.8em;top:.04em;position:relative;fill:#889696;" viewBox="0 0 576 512"&gt;&lt;path d="M0 117.66v346.32c0 11.32 11.43 19.06 21.94 14.86L160 416V32L20.12 87.95A32.006 32.006 0 0 0 0 117.66zM192 416l192 64V96L192 32v384zM554.06 33.16L416 96v384l139.88-55.95A31.996 31.996 0 0 0 576 394.34V48.02c0-11.32-11.43-19.06-21.94-14.86z"/&gt;&lt;/svg&gt; &lt;svg style="height:0.8em;top:.04em;position:relative;fill:#5f7470;" viewBox="0 0 576 512"&gt;&lt;path d="M0 117.66v346.32c0 11.32 11.43 19.06 21.94 14.86L160 416V32L20.12 87.95A32.006 32.006 0 0 0 0 117.66zM192 416l192 64V96L192 32v384zM554.06 33.16L416 96v384l139.88-55.95A31.996 31.996 0 0 0 576 394.34V48.02c0-11.32-11.43-19.06-21.94-14.86z"/&gt;&lt;/svg&gt; 
 
 ### Parte 1
 # Importar datos de GPS&lt;br&gt;
 
-**Miriam Lerma**&lt;br&gt;
+Miriam Lerma&lt;br&gt;
 Marzo 2021
+
+&lt;h1&gt;&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#e0e2db;" viewBox="0 0 576 512"&gt;&lt;path d="M0 117.66v346.32c0 11.32 11.43 19.06 21.94 14.86L160 416V32L20.12 87.95A32.006 32.006 0 0 0 0 117.66zM192 416l192 64V96L192 32v384zM554.06 33.16L416 96v384l139.88-55.95A31.996 31.996 0 0 0 576 394.34V48.02c0-11.32-11.43-19.06-21.94-14.86z"/&gt;&lt;/svg&gt; &lt;svg style="height:0.8em;top:.04em;position:relative;fill:#d2d4c8;" viewBox="0 0 576 512"&gt;&lt;path d="M0 117.66v346.32c0 11.32 11.43 19.06 21.94 14.86L160 416V32L20.12 87.95A32.006 32.006 0 0 0 0 117.66zM192 416l192 64V96L192 32v384zM554.06 33.16L416 96v384l139.88-55.95A31.996 31.996 0 0 0 576 394.34V48.02c0-11.32-11.43-19.06-21.94-14.86z"/&gt;&lt;/svg&gt; &lt;svg style="height:0.8em;top:.04em;position:relative;fill:#b8bdb5;" viewBox="0 0 576 512"&gt;&lt;path d="M0 117.66v346.32c0 11.32 11.43 19.06 21.94 14.86L160 416V32L20.12 87.95A32.006 32.006 0 0 0 0 117.66zM192 416l192 64V96L192 32v384zM554.06 33.16L416 96v384l139.88-55.95A31.996 31.996 0 0 0 576 394.34V48.02c0-11.32-11.43-19.06-21.94-14.86z"/&gt;&lt;/svg&gt; &lt;svg style="height:0.8em;top:.04em;position:relative;fill:#889696;" viewBox="0 0 576 512"&gt;&lt;path d="M0 117.66v346.32c0 11.32 11.43 19.06 21.94 14.86L160 416V32L20.12 87.95A32.006 32.006 0 0 0 0 117.66zM192 416l192 64V96L192 32v384zM554.06 33.16L416 96v384l139.88-55.95A31.996 31.996 0 0 0 576 394.34V48.02c0-11.32-11.43-19.06-21.94-14.86z"/&gt;&lt;/svg&gt; &lt;svg style="height:0.8em;top:.04em;position:relative;fill:#5f7470;" viewBox="0 0 576 512"&gt;&lt;path d="M0 117.66v346.32c0 11.32 11.43 19.06 21.94 14.86L160 416V32L20.12 87.95A32.006 32.006 0 0 0 0 117.66zM192 416l192 64V96L192 32v384zM554.06 33.16L416 96v384l139.88-55.95A31.996 31.996 0 0 0 576 394.34V48.02c0-11.32-11.43-19.06-21.94-14.86z"/&gt;&lt;/svg&gt; 
+
 
 ---
 
@@ -29,6 +33,7 @@ Marzo 2021
 
 En esta presentación verán como:
 - Importar datos a R
+- Agregar columna ID
 - Eliminar periodos dentro de nuestros datos
 - Graficar trayectorias
 - Exportar nuestro nuevo data frame
@@ -45,6 +50,8 @@ En esta presentación verán como:
 ---
 
 class:center,middle
+
+&lt;h1&gt;&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#22577a;" viewBox="0 0 512 512"&gt;&lt;path d="M216 0h80c13.3 0 24 10.7 24 24v168h87.7c17.8 0 26.7 21.5 14.1 34.1L269.7 378.3c-7.5 7.5-19.8 7.5-27.3 0L90.1 226.1c-12.6-12.6-3.7-34.1 14.1-34.1H192V24c0-13.3 10.7-24 24-24zm296 376v112c0 13.3-10.7 24-24 24H24c-13.3 0-24-10.7-24-24V376c0-13.3 10.7-24 24-24h146.7l49 49c20.1 20.1 52.5 20.1 72.6 0l49-49H488c13.3 0 24 10.7 24 24zm-124 88c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20zm64 0c0-11-9-20-20-20s-20 9-20 20 9 20 20 20 20-9 20-20z"/&gt;&lt;/svg&gt;
 
 ## 1. Importar datos a R
 
@@ -247,7 +254,7 @@ Todos_GPS
 ```
 
 ```
-## # A tibble: 125,280 x 5
+## # A tibble: 62,640 x 5
 ##    Latitude Longitude DateGMT    TimeGMT  IDs  
 ##       &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;      &lt;time&gt;   &lt;chr&gt;
 ##  1    -27.2     -109. 02/11/2017 17:05:30 ID01 
@@ -260,13 +267,15 @@ Todos_GPS
 ##  8    -27.2     -109. 02/11/2017 17:34:49 ID01 
 ##  9    -27.2     -109. 02/11/2017 17:39:01 ID01 
 ## 10    -27.2     -109. 02/11/2017 17:43:09 ID01 
-## # ... with 125,270 more rows
+## # ... with 62,630 more rows
 ```
 
 
 ---
 
 class:center,middle
+
+&lt;h1&gt;&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#22577a;" viewBox="0 0 448 512"&gt;&lt;path d="M278.06 256L444.48 89.57c4.69-4.69 4.69-12.29 0-16.97-32.8-32.8-85.99-32.8-118.79 0L210.18 188.12l-24.86-24.86c4.31-10.92 6.68-22.81 6.68-35.26 0-53.02-42.98-96-96-96S0 74.98 0 128s42.98 96 96 96c4.54 0 8.99-.32 13.36-.93L142.29 256l-32.93 32.93c-4.37-.61-8.83-.93-13.36-.93-53.02 0-96 42.98-96 96s42.98 96 96 96 96-42.98 96-96c0-12.45-2.37-24.34-6.68-35.26l24.86-24.86L325.69 439.4c32.8 32.8 85.99 32.8 118.79 0 4.69-4.68 4.69-12.28 0-16.97L278.06 256zM96 160c-17.64 0-32-14.36-32-32s14.36-32 32-32 32 14.36 32 32-14.36 32-32 32zm0 256c-17.64 0-32-14.36-32-32s14.36-32 32-32 32 14.36 32 32-14.36 32-32 32z"/&gt;&lt;/svg&gt;
 
 ## 2. Recortar
 Para esta parte puedes necesitar algunos básicos de como manipular data frames en R, si necesitas más información [ve aquí](https://miriamll.github.io/Curso_CIAD/Clase3Parte2#1).
@@ -329,8 +338,10 @@ Nota que el numero de observaciones se reduce.
 
 class:center,middle
 
+&lt;h1&gt;&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#22577a;" viewBox="0 0 512 512"&gt;&lt;path d="M167.02 309.34c-40.12 2.58-76.53 17.86-97.19 72.3-2.35 6.21-8 9.98-14.59 9.98-11.11 0-45.46-27.67-55.25-34.35C0 439.62 37.93 512 128 512c75.86 0 128-43.77 128-120.19 0-3.11-.65-6.08-.97-9.13l-88.01-73.34zM457.89 0c-15.16 0-29.37 6.71-40.21 16.45C213.27 199.05 192 203.34 192 257.09c0 13.7 3.25 26.76 8.73 38.7l63.82 53.18c7.21 1.8 14.64 3.03 22.39 3.03 62.11 0 98.11-45.47 211.16-256.46 7.38-14.35 13.9-29.85 13.9-45.99C512 20.64 486 0 457.89 0z"/&gt;&lt;/svg&gt;
+
 ## 3. Graficar
-Para los básicos de como realizar gráficos en R [ve aquí](https://miriamll.github.io/Curso_CIAD/Clase2#1).
+Para recordar los básicos de como realizar gráficos en R [ve aquí](https://miriamll.github.io/Curso_CIAD/Clase2#1).
 
 ---
 
@@ -353,16 +364,26 @@ Para graficar varios individuos
 
 ```r
 ggplot(data = Todos_GPS, aes(x = Latitude, y = Longitude)) +
-  geom_path(aes(group = IDs, color = IDs),size=2)+
+  geom_path(aes(group = IDs, color = IDs))+
   theme_bw()
 ```
 
 &lt;img src="Parte1_files/figure-html/unnamed-chunk-30-1.png" width="40%" /&gt;
 
+_Nota_ es posible que en la presentación las lineas se vean en color gris, pero en tu Rstudio mostrara los diferentes colores.
 
 ---
 
-## 4. Exportar 
+class: center, middle
+
+&lt;h1&gt;&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#22577a;" viewBox="0 0 576 512"&gt;&lt;path d="M384 121.9c0-6.3-2.5-12.4-7-16.9L279.1 7c-4.5-4.5-10.6-7-17-7H256v128h128zM571 308l-95.7-96.4c-10.1-10.1-27.4-3-27.4 11.3V288h-64v64h64v65.2c0 14.3 17.3 21.4 27.4 11.3L571 332c6.6-6.6 6.6-17.4 0-24zm-379 28v-32c0-8.8 7.2-16 16-16h176V160H248c-13.2 0-24-10.8-24-24V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V352H208c-8.8 0-16-7.2-16-16z"/&gt;&lt;/svg&gt;
+
+# 4. Exportar 
+Para esta parte necesitas saber cargar tus datos, si necesitas recordar como hacerlo, te recomiendo [empezar por aquí](https://miriamll.github.io/Curso_CIAD/Clase3Parte2#54).
+
+---
+
+## 4.1. Exportar 
 
 Seleccionar la carpeta.
 
@@ -386,17 +407,23 @@ write_csv(
 - Para dudas, comentarios y sugerencias:  
 Escríbeme a miriamjlerma@gmail.com
 
-- Este material esta libre y se encuentra en mi [github](https://github.com/MiriamLL/Curso_tracking/blob/main/Parte1.Rmd).
+- Este material esta accesible y se encuentra en mi [github](https://github.com/MiriamLL/Curso_tracking/).
 
-- Si quieres dar créditos puedes usar:
-Lerma M, 2021. Importar datos de GPS. Próximamente con zenodo. 
+&lt;br&gt;
 
-- Los datos de prueba vienen de la publicación:
-Lerma M, Dehnhard N, Luna-Jorquera G, Voigt CC, Garthe SS (2020) Breeding stage, not sex, affects foraging characteristics in masked boobies at Rapa Nui. Behavioral ecology and sociobiology 74: 149 [OpenAccess](https://link.springer.com/article/10.1007/s00265-020-02921-1)
+Si quieres dar créditos puedes usar:
+- Lerma M, 2021. Clase biologging. Próximamente con zenodo. 
+- Lerma M, Dehnhard N, Luna-Jorquera G, Voigt CC, Garthe SS (2020) Breeding stage, not sex, affects foraging characteristics in masked boobies at Rapa Nui. Behavioral ecology and sociobiology 74: 149 [OpenAccess](https://link.springer.com/article/10.1007/s00265-020-02921-1)
+Los datos de prueba vienen de esa publicación. 
+
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;br&gt;
 
 .center[
 
-&lt;svg style="height:0.8em;top:.04em;position:relative;fill:black;" viewBox="0 0 576 512"&gt;&lt;path d="M280.37 148.26L96 300.11V464a16 16 0 0 0 16 16l112.06-.29a16 16 0 0 0 15.92-16V368a16 16 0 0 1 16-16h64a16 16 0 0 1 16 16v95.64a16 16 0 0 0 16 16.05L464 480a16 16 0 0 0 16-16V300L295.67 148.26a12.19 12.19 0 0 0-15.3 0zM571.6 251.47L488 182.56V44.05a12 12 0 0 0-12-12h-56a12 12 0 0 0-12 12v72.61L318.47 43a48 48 0 0 0-61 0L4.34 251.47a12 12 0 0 0-1.6 16.9l25.5 31A12 12 0 0 0 45.15 301l235.22-193.74a12.19 12.19 0 0 1 15.3 0L530.9 301a12 12 0 0 0 16.9-1.6l25.5-31a12 12 0 0 0-1.7-16.93z"/&gt;&lt;/svg&gt;[Volver ](https://miriamlerma.netlify.app/posts/2021-03-16-biologging/)
+&lt;h3&gt;&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#22577a;" viewBox="0 0 576 512"&gt;&lt;path d="M280.37 148.26L96 300.11V464a16 16 0 0 0 16 16l112.06-.29a16 16 0 0 0 15.92-16V368a16 16 0 0 1 16-16h64a16 16 0 0 1 16 16v95.64a16 16 0 0 0 16 16.05L464 480a16 16 0 0 0 16-16V300L295.67 148.26a12.19 12.19 0 0 0-15.3 0zM571.6 251.47L488 182.56V44.05a12 12 0 0 0-12-12h-56a12 12 0 0 0-12 12v72.61L318.47 43a48 48 0 0 0-61 0L4.34 251.47a12 12 0 0 0-1.6 16.9l25.5 31A12 12 0 0 0 45.15 301l235.22-193.74a12.19 12.19 0 0 1 15.3 0L530.9 301a12 12 0 0 0 16.9-1.6l25.5-31a12 12 0 0 0-1.7-16.93z"/&gt;&lt;/svg&gt;[Volver ](https://miriamlerma.netlify.app/posts/2021-03-16-biologging/)
 ]
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>

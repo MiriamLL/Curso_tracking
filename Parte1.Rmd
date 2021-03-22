@@ -5,7 +5,7 @@ author: "Miriam Lerma"
 date: "Marzo 2021"
 output:
   xaringan::moon_reader:
-    css: ["default"]
+    css: xaringan-themer.css
     seal: false
     nature:
       highlightStyle: github
@@ -14,20 +14,36 @@ output:
       
 ---
 
+```{r xaringan-themer, include=FALSE, warning=FALSE}
+library(xaringanthemer)
+style_mono_accent(
+  base_color = "#22577a",
+  header_font_google = google_font("Josefin Sans"),
+  text_font_google   = google_font("Montserrat", "300", "300i"),
+  code_font_google   = google_font("Fira Mono"),
+  background_color = "#faf9f9",
+  text_color = "#22577a",
+  code_inline_background_color = '#83c5be'
+)
+```
+
 ```{r include = FALSE}
 #Paquetes
 library(xaringanExtra)
+library(fontawesome)
 ```
 
 class: title-slide, inverse, middle, right
-background-image: url(https://images.unsplash.com/photo-1473163928189-364b2c4e1135?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80)
-background-size: cover
+<h1>`r fa("map", fill = "#e0e2db")` `r fa("map", fill = "#d2d4c8")` `r fa("map", fill = "#b8bdb5")` `r fa("map", fill = "#889696")` `r fa("map", fill = "#5f7470")` 
 
 ### `r rmarkdown::metadata$title`
 # `r rmarkdown::metadata$subtitle`
 
-**`r rmarkdown::metadata$author`**<br>
+`r rmarkdown::metadata$author`<br>
 `r rmarkdown::metadata$date`
+
+<h1>`r fa("map", fill = "#e0e2db")` `r fa("map", fill = "#d2d4c8")` `r fa("map", fill = "#b8bdb5")` `r fa("map", fill = "#889696")` `r fa("map", fill = "#5f7470")` 
+
 
 ---
 
@@ -35,6 +51,7 @@ background-size: cover
 
 En esta presentación verán como:
 - Importar datos a R
+- Agregar columna ID
 - Eliminar periodos dentro de nuestros datos
 - Graficar trayectorias
 - Exportar nuestro nuevo data frame
@@ -56,6 +73,8 @@ library(ggplot2)
 ---
 
 class:center,middle
+
+<h1>`r fa("download", fill = "#22577a")`
 
 ## 1. Importar datos a R
 
@@ -233,6 +252,8 @@ Todos_GPS
 
 class:center,middle
 
+<h1>`r fa("cut", fill = "#22577a")`
+
 ## 2. Recortar
 Para esta parte puedes necesitar algunos básicos de como manipular data frames en R, si necesitas más información [ve aquí](https://miriamll.github.io/Curso_CIAD/Clase3Parte2#1).
 
@@ -288,8 +309,10 @@ Nota que el numero de observaciones se reduce.
 
 class:center,middle
 
+<h1>`r fa("paint-brush", fill = "#22577a")`
+
 ## 3. Graficar
-Para los básicos de como realizar gráficos en R [ve aquí](https://miriamll.github.io/Curso_CIAD/Clase2#1).
+Para recordar los básicos de como realizar gráficos en R [ve aquí](https://miriamll.github.io/Curso_CIAD/Clase2#1).
 
 ---
 
@@ -311,11 +334,21 @@ ggplot(data = Todos_GPS, aes(x = Latitude, y = Longitude)) +
   geom_path(aes(group = IDs, color = IDs))+
   theme_bw()
 ```
-_Nota_ es posible que en la presentacion las lineas se vean en color gris, pero en tu Rstudio mostrara los diferentes colores.
+
+_Nota_ es posible que en la presentación las lineas se vean en color gris, pero en tu Rstudio mostrara los diferentes colores.
 
 ---
 
-## 4. Exportar 
+class: center, middle
+
+<h1>`r fa("file-export", fill = "#22577a")`
+
+# 4. Exportar 
+Para esta parte necesitas saber cargar tus datos, si necesitas recordar como hacerlo, te recomiendo [empezar por aquí](https://miriamll.github.io/Curso_CIAD/Clase3Parte2#54).
+
+---
+
+## 4.1. Exportar 
 
 Seleccionar la carpeta.
 ```{r}
@@ -337,20 +370,23 @@ write_csv(
 - Para dudas, comentarios y sugerencias:  
 Escríbeme a miriamjlerma@gmail.com
 
-- Este material esta libre y se encuentra en mi [github](https://github.com/MiriamLL/Curso_tracking/blob/main/Parte1.Rmd).
+- Este material esta accesible y se encuentra en mi [github](https://github.com/MiriamLL/Curso_tracking/).
 
-- Si quieres dar créditos puedes usar:
-Lerma M, 2021. Importar datos de GPS. Próximamente con zenodo. 
+<br>
 
-- Los datos de prueba vienen de la publicación:
-Lerma M, Dehnhard N, Luna-Jorquera G, Voigt CC, Garthe SS (2020) Breeding stage, not sex, affects foraging characteristics in masked boobies at Rapa Nui. Behavioral ecology and sociobiology 74: 149 [OpenAccess](https://link.springer.com/article/10.1007/s00265-020-02921-1)
+Si quieres dar créditos puedes usar:
+- Lerma M, 2021. Clase biologging. Próximamente con zenodo. 
+- Lerma M, Dehnhard N, Luna-Jorquera G, Voigt CC, Garthe SS (2020) Breeding stage, not sex, affects foraging characteristics in masked boobies at Rapa Nui. Behavioral ecology and sociobiology 74: 149 [OpenAccess](https://link.springer.com/article/10.1007/s00265-020-02921-1)
+Los datos de prueba vienen de esa publicación. 
 
-
-
+<br>
+<br>
+<br>
+<br>
 
 .center[
 ```{r, echo=FALSE}
 library(fontawesome)
 ```
-`r fa("home", fill = "black")`[Volver ](https://miriamlerma.netlify.app/posts/2021-03-16-biologging/)
+<h3>`r fa("home", fill = "#22577a")`[Volver ](https://miriamlerma.netlify.app/posts/2021-03-16-biologging/)
 ]

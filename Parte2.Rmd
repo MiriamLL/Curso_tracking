@@ -5,7 +5,7 @@ author: "Miriam Lerma"
 date: "Marzo 2021"
 output:
   xaringan::moon_reader:
-    css: ["default"]
+    css: xaringan-themer.css
     seal: false
     nature:
       highlightStyle: github
@@ -14,32 +14,47 @@ output:
       
 ---
 
+```{r xaringan-themer, include=FALSE, warning=FALSE}
+library(xaringanthemer)
+style_mono_accent(
+  base_color = "#2a9d8f",
+  header_font_google = google_font("Josefin Sans"),
+  text_font_google   = google_font("Josefin Sans"),
+  code_font_google   = google_font("Fira Mono"),
+  background_color = "#faf9f9",
+  text_color = "#40916c",
+  code_inline_background_color = '#83c5be'
+)
+```
+
 ```{r include = FALSE}
 #Paquetes
 library(xaringanExtra)
+library(fontawesome)
 ```
 
 class: title-slide, inverse, middle, right
-background-image: url(https://images.unsplash.com/photo-1550534791-2677533605ab?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80)
-background-size: cover
+<h1>`r fa("clock", fill = "#52b788")` `r fa("clock", fill = "#74c69d")` `r fa("clock", fill = "#95d5b2")` `r fa("clock", fill = "#b7e4c7")` `r fa("clock", fill = "#d8f3dc")` 
 
 ### `r rmarkdown::metadata$title`
 # `r rmarkdown::metadata$subtitle`
 
-**`r rmarkdown::metadata$author`**<br>
+`r rmarkdown::metadata$author`<br>
 `r rmarkdown::metadata$date`
+
+<h1>`r fa("clock", fill = "#52b788")` `r fa("clock", fill = "#74c69d")` `r fa("clock", fill = "#95d5b2")` `r fa("clock", fill = "#b7e4c7")` `r fa("clock", fill = "#d8f3dc")` 
 
 ---
 
 # Intro
 
 En esta presentación verán como:
+- Cargar datos de GPS <br>
 - Corregir la hora de acuerdo al GMT
 
 ```{r, echo=FALSE,include=FALSE, message=FALSE}
 library(emo)
 library(here)
-library(fontawesome)
 library(ggplot2)
 ```
 
@@ -48,13 +63,14 @@ library(ggplot2)
 ## Ustedes
 
 - Tienes una base de datos con datos de GPS <br>
-- Tienen conocimientos básicos de R, si no te recomiendo [empezar por aquí](https://miriamlerma.netlify.app/posts/2021-03-01-introar/). <br>
-- Saben cargar y unir tus csv [si no ir primero aquí](https://miriamll.github.io/Curso_tracking/Parte1)
-- Necesitan corregir la hora a sus GMT
+- Tienen conocimientos básicos de R, si no te recomiendo [empezar por aquí](https://miriamlerma.netlify.app/posts/2021-03-01-introar/) <br>
+- Necesitan corregir la hora de sus GPSs
   
 ---
 
 class:center,middle
+
+<h3>`r fa("download", fill = "#2a9d8f")`
 
 ## 1. Importar datos a R
 
@@ -64,19 +80,19 @@ Para esta parte necesitas saber cargar tus datos, si necesitas recordar como hac
 
 ### 1.1. Cargar datos
 
-Cargar el paquete tidyverse
+Cargar el paquete tidyverse.
 ```{r, message=FALSE, warning=FALSE}
 library(tidyverse)
 library(here)
 ```
 
-Define tu carpeta.
+Definir tu carpeta.
 ```{r}
 # Ruta relativa
 DatosFolder<-here("01Datos")
 ```
 
-Enlista tus archivos.
+Enlistar tus archivos.
 ```{r}
 Lista_GPS <- list.files(DatosFolder,pattern="*.csv",full.names=TRUE)
 ```
@@ -94,14 +110,14 @@ Si quieres descargar los archivos de prueba [ve aquí](https://github.com/Miriam
 
 Para poder identificar los diferentes GPS, antes de unir todos tus datos deberás agregar un ID.
 
-Usando el nombre del archivo
+Eta funcion usa los nombres de los archivos.
 ```{r}
 Nombres_archivos<-list.files(DatosFolder,pattern="*.csv",
                              full.names=FALSE)
 IDs<-gsub('.csv','',Nombres_archivos)
 ```
 
-Agrega una columna a cada elemento de la lista.
+Aqui agrega una columna a cada elemento de la lista con su respectivo ID.
 ```{r}
 for( i in seq_along(Lista_GPS)){
   Lista_GPS[[i]]$IDs <- IDs[i]
@@ -112,7 +128,7 @@ for( i in seq_along(Lista_GPS)){
 
 ### 1.3. Unir multiples archivos
 
-Esta función te permite unirlos.
+Esta función te permite unirlos _rbind_ es de row (fila) bind (unir).
 ```{r}
 Todos_GPS <- do.call("rbind",Lista_GPS)
 ```
@@ -127,15 +143,16 @@ Todos_GPS
 
 class:center,middle
 
-# 2. Corregir hora
+<h1>`r fa("search", fill = "#2a9d8f")`
+## 2. Revisar el día y la hora
 Para esta parte puedes necesitar algunos básicos de como manipular data frames en R, si necesitas más información [ve aquí](https://miriamll.github.io/Curso_CIAD/Clase3Parte2#1).
 
 ---
 
-# 2.1. Identifica tu zona horaria
+### 2.1. Identifica tu zona horaria
 
-Es común que los datos se GPS se registren en GMT+0.
-Cuando usamos GPS en América Latina, lo primero que tienes que hacer es identificar en que zona horaria te encuentras.
+Es común que los datos se GPS se registren en GMT+0. <br>
+Cuando usamos GPS en América Latina, tienes que identificar en que zona horaria te encuentras.
 
 .center[
 ```{r echo=FALSE, out.height=350}
@@ -145,19 +162,17 @@ knitr::include_graphics("https://upload.wikimedia.org/wikipedia/commons/thumb/d/
 
 ---
 
+### 2.2. Día Hora
 
----
-
-# 2.2. Día Hora
-
-Si aún no lo has hecho, para este paso tendrás que unir las columnas de fecha y tiempo en los datos de GPS y convertir al formato POSIXct para que R entienda que son hora y día.
+Vamos a revisar nuestros datos de día y hora.  
+Primero unimos las columnas de día y hora en los datos de GPS y convertimos al formato POSIXct para que R entienda que son día y hora.
 
 Para unirlos en una columna:
 ```{r}
 Todos_GPS$DiaHora<-paste(Todos_GPS$DateGMT,Todos_GPS$TimeGMT)
 ```
 
-Para decirle que son fecha y hora:
+Para decirle que son día y hora:
 ```{r}
 Todos_GPS$DiaHora<-as.POSIXct(strptime(Todos_GPS$DiaHora, 
                                        "%d/%m/%Y %H:%M:%S"),"GMT")
@@ -165,51 +180,49 @@ Todos_GPS$DiaHora<-as.POSIXct(strptime(Todos_GPS$DiaHora,
 
 Considera que:  
 .pull-left[
-- y = Year/Año.  
-- m = Month/Mes.  
-- d = Day/Dia.]  
+- **y** es para **año**   
+- **m** es para **mes**  
+- **d** es para **día**]  
 .pull-right[
-- H = Hour/Hora.  
-- M = Minute/Minuto.  
-- S = Second/Segundo.  
+- **H** es para **Hora**  
+- **M** es para **Minuto**  
+- **S** es para **Segundo**  
 ]
-- Nota que fechas son letras en minusculas y horas en mayusculas.  
+
+<br>
+_Nota que la m para mes es en minusculas y para Minuto en mayusculas._
 
 ---
 
-# 2.3. Errores comunes
+### 2.3. Errores comunes
 
 Verifica como tienes ordenados tus datos.<br>
-Tus datos deberan estar en el mismo formato para que no te cause problemas.<br>
 - Verifica si usas **/** o **-** para separar tus fechas, o que otro separador puede existir en tus datos.
 
-Para el formato '21-12-2017 05:30:01', usa:
+Para el formato '21-12-2017 05:30:01'.
 ```{r, eval=FALSE}
 #format = "%d-%m-%Y %H:%M:%S"
 ```
 
-Para el formato '2017/12/21 05:30:01', usa:
+Para el formato '2017/12/21 05:30:01'.
 ```{r, eval=FALSE}
 #format = "%Y/%m/%d %H:%M:%S"
 ```
 
 ---
 
-# 2.4. Verificar datos.
+### 2.4. Verificar datos.
 
-Verifica que tus datos no tengan NAs en fecha y hora.
+Verifica que tus datos no tengan NAs ni ceros en día y hora.
 ```{r}
 range(Todos_GPS$DiaHora)
 ```
 
-Si tienes NAs, deberas sacarlos.
+Si tienes **NAs**, deberas sacarlos.
 ```{r}
 Todos_GPS_Limpio<-Todos_GPS%>%
   drop_na(DiaHora)
 ```
-Si tenias NAs, tendras menor numero de observaciones.
-<br>
-Revisa tambien no tener ceros!.
 
 Si tienes ceros, puedes usar **filter** y **!=** que significa **diferente de**.
 ```{r}
@@ -219,12 +232,15 @@ Todos_GPS_Limpio<-Todos_GPS%>%
 
 ---
 
+class: center, middle
 
+<h1>`r fa("clock", fill = "#2a9d8f")`
 ## 3. Corregir la hora
+Para esta parte puedes necesitar algunos básicos de como manipular data frames en R, si necesitas más información [ve aquí](https://miriamll.github.io/Curso_CIAD/Clase3Parte2#1).
 
 ---
 
-# 3.1. Usando mutate
+### 3.1. Usando mutate
 
 Cargar la libreria.
 ```{r, message=FALSE}
@@ -236,12 +252,18 @@ Renombra el objeto.
 Opcion1<-Todos_GPS
 ```
 
-Para nuestros datos tenemos 5 horas de diferencia.  
+Supongamos que para nuestros datos tenemos 5 horas de diferencia.  
+
 Para restar las 5 horas, creamos una columna que se llama HoraReal, no es necesario pero sirve para verificar que todo este correcto.
 ```{r}
 Opcion1<-Opcion1 %>%
   mutate(HoraReal = DiaHora - 5*60*60)
 ```
+Nota que hora se resta a la columna DiaHora y las cinco horas se multiplican por los minutos y segundos.
+
+---
+
+### 3.1. Usando mutate
 
 Listo!
 ```{r}
@@ -255,7 +277,7 @@ range(Opcion1$HoraReal)
 
 ---
 
-# 4.1. Usando dmy_hms
+### 3.2. Usando dmy_hms
 
 Cargar libreria.
 ```{r, message=FALSE}
@@ -277,11 +299,17 @@ Restar los segundos de diferencia
 ```{r}
 Opcion2$HoraReal <- Opcion2$DiaHora - 3600*5
 ```
+Nota que hora se resta a la columna DiaHora y las cinco horas se multiplican por los minutos y segundos.
+
+---
+
+### 3.2. Usando dmy_hms
 
 Listo!
 ```{r}
 head(Opcion2$HoraReal,5)
 ```
+
 Verificar
 ```{r}
 range(Opcion2$HoraReal)
@@ -289,7 +317,7 @@ range(Opcion2$HoraReal)
 
 ---
 
-# 5.2. Usando lubridate
+### 3.3. Usando lubridate
 
 Renombra tu objeto
 ```{r}
@@ -301,7 +329,7 @@ Cargar paquete
 library(lubridate)
 ```
 
-El formato original es probablemente tz Europe/London
+El formato original es probablemente tz Europe/Amsterdam
 ```{r}
 Opcion3$Hora<-ymd_hms(Opcion3$DiaHora, tz = "Europe/Amsterdam")
 ```
@@ -312,7 +340,7 @@ head(Opcion3$Hora)
 
 ---
 
-# 5.2. Usando with_tz
+### 3.4. Usando lubridate
 
 Para cambiarlo usar **with_tz**.
 ```{r}
@@ -330,23 +358,34 @@ Verificar
 range(Opcion3$HoraReal)
 ```
 
-
 ---
 
-# 5.2. Usando with_tz
+### 3.4. Usando with_tz
 
-**Nota** Para elegir la tzone tienes que conocer el nombre de tu region y se complica con el horario de verano.
+Para elegir la tzone tienes que conocer el **nombre de tu región** y considera el **horario de verano**.
 
-Lista de nombres de las zonas horarias aceptadas:
+Para ver en R la lista de nombres de las zonas horarias aceptadas usa la siguiente linea de código.
 ```{r, eval=FALSE}
 OlsonNames()
 ```
+Te van a aparecer muchos resultados.
 
-[Lista en Wikipedia](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones)
+Otra opción es ver la [lista en Wikipedia](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).
+
+
 
 ---
 
-# 6. Exportar 
+class: center, middle
+
+<h1>`r fa("file-export", fill = "#2a9d8f")`
+
+# 4. Exportar 
+Para esta parte necesitas saber cargar tus datos, si necesitas recordar como hacerlo, te recomiendo [empezar por aquí](https://miriamll.github.io/Curso_CIAD/Clase3Parte2#54).
+
+---
+
+### 4.1. Exportar 
 
 Seleccionar la carpeta.
 ```{r}
@@ -371,18 +410,20 @@ write_csv(
 
 ---
 
-## 7. Contacto
+## 5. Contacto
 
-- Para dudas, comentarios y sugerencias:  
-Escríbeme a miriamjlerma@gmail.com
+Para dudas, comentarios y sugerencias:  
+- Escríbeme a miriamjlerma@gmail.com
 
-- Este material esta libre y se encuentra en mi [github](https://github.com/MiriamLL/Curso_tracking/).
+Este material esta accesible y se encuentra en 
+- mi [github](https://github.com/MiriamLL/Curso_tracking/).
 
-- Si quieres dar créditos puedes usar:
-Lerma M, 2021. Importar datos de GPS. Próximamente con zenodo. 
+<br>
 
-- Los datos de prueba vienen de la publicación:
-Lerma M, Dehnhard N, Luna-Jorquera G, Voigt CC, Garthe SS (2020) Breeding stage, not sex, affects foraging characteristics in masked boobies at Rapa Nui. Behavioral ecology and sociobiology 74: 149 [OpenAccess](https://link.springer.com/article/10.1007/s00265-020-02921-1)
+Si quieres dar créditos puedes usar:
+- Lerma M, 2021. Clase biologging. Próximamente con zenodo. 
+- Lerma M, Dehnhard N, Luna-Jorquera G, Voigt CC, Garthe SS (2020) Breeding stage, not sex, affects foraging characteristics in masked boobies at Rapa Nui. Behavioral ecology and sociobiology 74: 149 [OpenAccess](https://link.springer.com/article/10.1007/s00265-020-02921-1)
+Los datos de prueba vienen de esa publicación. 
 
 <br>
 <br>
@@ -393,5 +434,5 @@ Lerma M, Dehnhard N, Luna-Jorquera G, Voigt CC, Garthe SS (2020) Breeding stage,
 ```{r, echo=FALSE}
 library(fontawesome)
 ```
-`r fa("home", fill = "black")`[Volver ](https://miriamlerma.netlify.app/posts/2021-03-16-biologging/)
+<h3>`r fa("home", fill = "#2a9d8f")`[Volver ](https://miriamlerma.netlify.app/posts/2021-03-16-biologging/)
 ]
