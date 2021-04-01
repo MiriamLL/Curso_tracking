@@ -1,6 +1,6 @@
 ---
 title: "Parte 1"
-subtitle: "Importar datos <br>de GPS"
+subtitle: "Importar <br> datos de GPS"
 author: "Miriam Lerma"
 date: "Marzo 2021"
 output:
@@ -21,18 +21,18 @@ library(fontawesome)
 ```
 
 class: title-slide, inverse, middle, right
-background-image: url(https://images.unsplash.com/photo-1538766017398-415434a31a5b?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80)
+background-image: url(https://raw.githubusercontent.com/MiriamLL/Curso_tracking/main/03Figuras/PortadaC.jpg)
 background-size: cover
 
-<h1>`r fa("map", fill = "#e0e2db")` `r fa("map", fill = "#d2d4c8")` `r fa("map", fill = "#b8bdb5")` `r fa("map", fill = "#889696")` `r fa("map", fill = "#5f7470")` 
+<h1>`r fa("map", fill = "#264653")` `r fa("map", fill = "#203C46")` `r fa("map", fill = "#2D5462")` `r fa("map", fill = "#3A6C7E")` `r fa("map", fill = "#4D90A8")` 
 
 ### `r rmarkdown::metadata$title`
 # `r rmarkdown::metadata$subtitle`
 
-`r rmarkdown::metadata$author`<br>
+**`r rmarkdown::metadata$author`**<br>
 `r rmarkdown::metadata$date`
 
-<h1>`r fa("map", fill = "#e0e2db")` `r fa("map", fill = "#d2d4c8")` `r fa("map", fill = "#b8bdb5")` `r fa("map", fill = "#889696")` `r fa("map", fill = "#5f7470")` 
+<h1>`r fa("map", fill = "#264653")` `r fa("map", fill = "#203C46")` `r fa("map", fill = "#2D5462")` `r fa("map", fill = "#3A6C7E")` `r fa("map", fill = "#4D90A8")`
 
 
 ---
@@ -355,6 +355,7 @@ write_csv(
 
 ---
 
+
 ## 5. Contacto
 
 - Para dudas, comentarios y sugerencias:  
@@ -367,7 +368,7 @@ Escríbeme a miriamjlerma@gmail.com
 Si quieres dar créditos puedes usar:
 - Lerma M, 2021. Clase biologging. 
 - Lerma M, Dehnhard N, Luna-Jorquera G, Voigt CC, Garthe S (2020) Breeding stage, not sex, affects foraging characteristics in masked boobies at Rapa Nui. Behavioral ecology and sociobiology 74: 149 [`r fa("external-link-alt", fill = "#22577a")`OpenAccess](https://link.springer.com/article/10.1007/s00265-020-02921-1). <br>
-**Los datos de prueba vienen de esta publicación. **
+**Los datos de prueba provienen de esta publicación. **
 
 <br>
 <br>
