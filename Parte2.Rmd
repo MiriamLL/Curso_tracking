@@ -71,64 +71,18 @@ Para esta parte necesitas saber cargar tus datos, si necesitas recordar como hac
 
 ### 1.1. Cargar datos
 
-Cargar el paquete tidyverse.
+Para cargar datos de prueba.<br>
+Puedes instalar el paquete 'sula'
+```{r, eval=FALSE,message=FALSE, warning=FALSE}
+remotes::install_github("MiriamLL/sula")
+```
+
+Cargar datos
 ```{r, message=FALSE, warning=FALSE}
-library(tidyverse)
-library(here)
+library(sula)
+Todos_GPS<-GPSdata
+head(Todos_GPS)
 ```
-
-Definir tu carpeta.
-```{r}
-# Ruta relativa
-DatosFolder<-here("01Datos")
-```
-
-Enlistar tus archivos.
-```{r}
-Lista_GPS <- list.files(DatosFolder,pattern="*.csv",full.names=TRUE)
-```
-Importante: tu debes definir si son txt, xlsx o csvs.
-
----
-
-### 1.2. Leer y unir multiples archivos
-
-Esta función sirve para leer todos los archivos.
-```{r, message=FALSE}
-Lista_GPS <- lapply(Lista_GPS,read_csv)
-```
-Si quieres descargar los archivos de prueba [`r fa("external-link-alt", fill = "#22577a")`ve aquí](https://github.com/MiriamLL/Curso_tracking/tree/main/01Datos).
-
-Para poder identificar los diferentes GPS, antes de unir todos tus datos deberás agregar un ID.
-
-Esta función usa los nombres de los archivos.
-```{r}
-Nombres_archivos<-list.files(DatosFolder,pattern="*.csv",
-                             full.names=FALSE)
-IDs<-gsub('.csv','',Nombres_archivos)
-```
-
-Aqui agrega una columna a cada elemento de la lista con su respectivo ID.
-```{r}
-for( i in seq_along(Lista_GPS)){
-  Lista_GPS[[i]]$IDs <- IDs[i]
-}
-```
-
----
-
-### 1.3. Unir multiples archivos
-
-Esta función te permite unirlos _rbind_ es de row (fila) bind (unir).
-```{r}
-Todos_GPS <- do.call("rbind",Lista_GPS)
-```
-Pero **ojo** el numero de columnas y nombres de las columnas debe ser el mismo.
-
-```{r}
-Todos_GPS
-```
-
 
 ---
 
@@ -209,8 +163,9 @@ Verifica que tus datos no tengan NAs ni ceros en día y hora.
 range(Todos_GPS$DiaHora)
 ```
 
-Si tienes **NAs**, deberas sacarlos.
-```{r}
+Si tienes **NAs**, deberas sacarlos, puedes usar la libreria tidyverse.
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
 Todos_GPS_Limpio<-Todos_GPS%>%
   drop_na(DiaHora)
 ```

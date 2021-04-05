@@ -64,89 +64,32 @@ Para esta parte necesitas saber cargar tus datos, si necesitas recordar como hac
 
 ### 1.1. Cargar datos
 
-Cargar el paquete tidyverse.
+Para cargar datos de prueba.&lt;br&gt;
+Puedes instalar el paquete 'sula'
 
 ```r
-library(tidyverse)
-library(here)
+remotes::install_github("MiriamLL/sula")
 ```
 
-Definir tu carpeta.
+Cargar datos
 
 ```r
-# Ruta relativa
-DatosFolder&lt;-here("01Datos")
-```
-
-Enlistar tus archivos.
-
-```r
-Lista_GPS &lt;- list.files(DatosFolder,pattern="*.csv",full.names=TRUE)
-```
-Importante: tu debes definir si son txt, xlsx o csvs.
-
----
-
-### 1.2. Leer y unir multiples archivos
-
-Esta función sirve para leer todos los archivos.
-
-```r
-Lista_GPS &lt;- lapply(Lista_GPS,read_csv)
-```
-Si quieres descargar los archivos de prueba [&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#22577a;" viewBox="0 0 576 512"&gt;&lt;path d="M576 24v127.984c0 21.461-25.96 31.98-40.971 16.971l-35.707-35.709-243.523 243.523c-9.373 9.373-24.568 9.373-33.941 0l-22.627-22.627c-9.373-9.373-9.373-24.569 0-33.941L442.756 76.676l-35.703-35.705C391.982 25.9 402.656 0 424.024 0H552c13.255 0 24 10.745 24 24zM407.029 270.794l-16 16A23.999 23.999 0 0 0 384 303.765V448H64V128h264a24.003 24.003 0 0 0 16.97-7.029l16-16C376.089 89.851 365.381 64 344 64H48C21.49 64 0 85.49 0 112v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48V287.764c0-21.382-25.852-32.09-40.971-16.97z"/&gt;&lt;/svg&gt;ve aquí](https://github.com/MiriamLL/Curso_tracking/tree/main/01Datos).
-
-Para poder identificar los diferentes GPS, antes de unir todos tus datos deberás agregar un ID.
-
-Esta función usa los nombres de los archivos.
-
-```r
-Nombres_archivos&lt;-list.files(DatosFolder,pattern="*.csv",
-                             full.names=FALSE)
-IDs&lt;-gsub('.csv','',Nombres_archivos)
-```
-
-Aqui agrega una columna a cada elemento de la lista con su respectivo ID.
-
-```r
-for( i in seq_along(Lista_GPS)){
-  Lista_GPS[[i]]$IDs &lt;- IDs[i]
-}
-```
-
----
-
-### 1.3. Unir multiples archivos
-
-Esta función te permite unirlos _rbind_ es de row (fila) bind (unir).
-
-```r
-Todos_GPS &lt;- do.call("rbind",Lista_GPS)
-```
-Pero **ojo** el numero de columnas y nombres de las columnas debe ser el mismo.
-
-
-```r
-Todos_GPS
+library(sula)
+Todos_GPS&lt;-GPSdata
+head(Todos_GPS)
 ```
 
 ```
-## # A tibble: 542,880 x 5
-##    Latitude Longitude DateGMT    TimeGMT  IDs  
-##       &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;      &lt;time&gt;   &lt;chr&gt;
-##  1    -27.2     -109. 02/11/2017 17:05:30 GPS01
-##  2    -27.2     -109. 02/11/2017 17:09:35 GPS01
-##  3    -27.2     -109. 02/11/2017 17:13:50 GPS01
-##  4    -27.2     -109. 02/11/2017 17:17:59 GPS01
-##  5    -27.2     -109. 02/11/2017 17:22:13 GPS01
-##  6    -27.2     -109. 02/11/2017 17:26:25 GPS01
-##  7    -27.2     -109. 02/11/2017 17:30:37 GPS01
-##  8    -27.2     -109. 02/11/2017 17:34:49 GPS01
-##  9    -27.2     -109. 02/11/2017 17:39:01 GPS01
-## 10    -27.2     -109. 02/11/2017 17:43:09 GPS01
-## # ... with 542,870 more rows
+## # A tibble: 6 x 5
+##   Latitude Longitude DateGMT    TimeGMT  IDs  
+##      &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;    &lt;chr&gt;
+## 1    -27.2     -109. 02/11/2017 17:05:30 GPS01
+## 2    -27.2     -109. 02/11/2017 17:09:35 GPS01
+## 3    -27.2     -109. 02/11/2017 17:13:50 GPS01
+## 4    -27.2     -109. 02/11/2017 17:17:59 GPS01
+## 5    -27.2     -109. 02/11/2017 17:22:13 GPS01
+## 6    -27.2     -109. 02/11/2017 17:26:25 GPS01
 ```
-
 
 ---
 
@@ -234,9 +177,10 @@ range(Todos_GPS$DiaHora)
 ## [1] "2017-11-02 17:05:30 GMT" "2017-11-27 09:48:57 GMT"
 ```
 
-Si tienes **NAs**, deberas sacarlos.
+Si tienes **NAs**, deberas sacarlos, puedes usar la libreria tidyverse.
 
 ```r
+library(tidyverse)
 Todos_GPS_Limpio&lt;-Todos_GPS%&gt;%
   drop_na(DiaHora)
 ```
