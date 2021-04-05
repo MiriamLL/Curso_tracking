@@ -1,6 +1,5 @@
 ---
-title: "Parte 2"
-subtitle: "Corregir<br>(GMT)"
+title: "Corregir<br>hora"
 author: "Miriam Lerma"
 date: "Marzo 2021"
 output:
@@ -29,8 +28,7 @@ class: title-slide, inverse, middle, right
 
 <h1>`r fa("clock", fill = "#264653")` `r fa("clock", fill = "#203C46")` `r fa("clock", fill = "#2D5462")` `r fa("clock", fill = "#3A6C7E")` `r fa("clock", fill = "#4D90A8")` 
 
-### `r rmarkdown::metadata$title`
-# `r rmarkdown::metadata$subtitle`
+# `r rmarkdown::metadata$title`
 
 ## **`r rmarkdown::metadata$author`**<br>
 `r rmarkdown::metadata$date`
@@ -103,7 +101,7 @@ Si quieres descargar los archivos de prueba [`r fa("external-link-alt", fill = "
 
 Para poder identificar los diferentes GPS, antes de unir todos tus datos deberás agregar un ID.
 
-Eta funcion usa los nombres de los archivos.
+Esta función usa los nombres de los archivos.
 ```{r}
 Nombres_archivos<-list.files(DatosFolder,pattern="*.csv",
                              full.names=FALSE)

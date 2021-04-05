@@ -1,6 +1,5 @@
 ---
-title: "Parte 1"
-subtitle: "Importar<br>datos<br>de GPS"
+title: "Importar<br>datos<br>de GPS"
 author: "Miriam Lerma"
 date: "Marzo 2021"
 output:
@@ -27,8 +26,7 @@ background-size: cover
 
 <h1>`r fa("map", fill = "#264653")` `r fa("map", fill = "#203C46")` `r fa("map", fill = "#2D5462")` `r fa("map", fill = "#3A6C7E")` `r fa("map", fill = "#4D90A8")` 
 
-### `r rmarkdown::metadata$title`
-# `r rmarkdown::metadata$subtitle`
+# `r rmarkdown::metadata$title`
 
 ## **`r rmarkdown::metadata$author`**<br>
 `r rmarkdown::metadata$date`
