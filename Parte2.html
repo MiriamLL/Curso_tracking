@@ -5,6 +5,10 @@
     <meta charset="utf-8" />
     <meta name="author" content="Miriam Lerma" />
     <script src="Parte2_files/header-attrs-2.6/header-attrs.js"></script>
+    <script src="Parte2_files/clipboard-2.0.6/clipboard.min.js"></script>
+    <link href="Parte2_files/xaringanExtra-clipboard-0.2.4/xaringanExtra-clipboard.css" rel="stylesheet" />
+    <script src="Parte2_files/xaringanExtra-clipboard-0.2.4/xaringanExtra-clipboard.js"></script>
+    <script>window.xaringanExtraClipboard(null, {"button":"Copy Code","success":"Copied!","error":"Press Ctrl+C to Copy"})</script>
     <link rel="stylesheet" href="Curso_tracking.css" type="text/css" />
   </head>
   <body>
@@ -128,7 +132,7 @@ Todos_GPS
 ```
 
 ```
-## # A tibble: 501,120 x 5
+## # A tibble: 522,000 x 5
 ##    Latitude Longitude DateGMT    TimeGMT  IDs  
 ##       &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;      &lt;time&gt;   &lt;chr&gt;
 ##  1    -27.2     -109. 02/11/2017 17:05:30 GPS01
@@ -141,7 +145,7 @@ Todos_GPS
 ##  8    -27.2     -109. 02/11/2017 17:34:49 GPS01
 ##  9    -27.2     -109. 02/11/2017 17:39:01 GPS01
 ## 10    -27.2     -109. 02/11/2017 17:43:09 GPS01
-## # ... with 501,110 more rows
+## # ... with 521,990 more rows
 ```
 
 
@@ -451,7 +455,7 @@ class: center, middle
 &lt;h1&gt;&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#22577a;" viewBox="0 0 576 512"&gt;&lt;path d="M384 121.9c0-6.3-2.5-12.4-7-16.9L279.1 7c-4.5-4.5-10.6-7-17-7H256v128h128zM571 308l-95.7-96.4c-10.1-10.1-27.4-3-27.4 11.3V288h-64v64h64v65.2c0 14.3 17.3 21.4 27.4 11.3L571 332c6.6-6.6 6.6-17.4 0-24zm-379 28v-32c0-8.8 7.2-16 16-16h176V160H248c-13.2 0-24-10.8-24-24V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V352H208c-8.8 0-16-7.2-16-16z"/&gt;&lt;/svg&gt;
 
 # 4. Exportar 
-Para esta parte necesitas saber cargar tus datos, si necesitas recordar como hacerlo, te recomiendo [&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#22577a;" viewBox="0 0 576 512"&gt;&lt;path d="M576 24v127.984c0 21.461-25.96 31.98-40.971 16.971l-35.707-35.709-243.523 243.523c-9.373 9.373-24.568 9.373-33.941 0l-22.627-22.627c-9.373-9.373-9.373-24.569 0-33.941L442.756 76.676l-35.703-35.705C391.982 25.9 402.656 0 424.024 0H552c13.255 0 24 10.745 24 24zM407.029 270.794l-16 16A23.999 23.999 0 0 0 384 303.765V448H64V128h264a24.003 24.003 0 0 0 16.97-7.029l16-16C376.089 89.851 365.381 64 344 64H48C21.49 64 0 85.49 0 112v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48V287.764c0-21.382-25.852-32.09-40.971-16.97z"/&gt;&lt;/svg&gt;empezar por aquí](https://miriamll.github.io/Curso_CIAD/Clase3Parte2#54).
+Para esta parte necesitas saber exportar tus datos, si necesitas recordar como hacerlo, te recomiendo [&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#22577a;" viewBox="0 0 576 512"&gt;&lt;path d="M576 24v127.984c0 21.461-25.96 31.98-40.971 16.971l-35.707-35.709-243.523 243.523c-9.373 9.373-24.568 9.373-33.941 0l-22.627-22.627c-9.373-9.373-9.373-24.569 0-33.941L442.756 76.676l-35.703-35.705C391.982 25.9 402.656 0 424.024 0H552c13.255 0 24 10.745 24 24zM407.029 270.794l-16 16A23.999 23.999 0 0 0 384 303.765V448H64V128h264a24.003 24.003 0 0 0 16.97-7.029l16-16C376.089 89.851 365.381 64 344 64H48C21.49 64 0 85.49 0 112v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48V287.764c0-21.382-25.852-32.09-40.971-16.97z"/&gt;&lt;/svg&gt;empezar por aquí](https://miriamll.github.io/Curso_CIAD/Clase3Parte2#54).
 
 ---
 
@@ -494,7 +498,6 @@ Este material esta accesible y se encuentra en
 &lt;br&gt;
 
 Si quieres dar créditos puedes usar:
-- Lerma M, 2021. Clase biologging. 
 - Lerma M, Dehnhard N, Luna-Jorquera G, Voigt CC, Garthe S (2020) Breeding stage, not sex, affects foraging characteristics in masked boobies at Rapa Nui. Behavioral ecology and sociobiology 74: 149 [&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#22577a;" viewBox="0 0 576 512"&gt;&lt;path d="M576 24v127.984c0 21.461-25.96 31.98-40.971 16.971l-35.707-35.709-243.523 243.523c-9.373 9.373-24.568 9.373-33.941 0l-22.627-22.627c-9.373-9.373-9.373-24.569 0-33.941L442.756 76.676l-35.703-35.705C391.982 25.9 402.656 0 424.024 0H552c13.255 0 24 10.745 24 24zM407.029 270.794l-16 16A23.999 23.999 0 0 0 384 303.765V448H64V128h264a24.003 24.003 0 0 0 16.97-7.029l16-16C376.089 89.851 365.381 64 344 64H48C21.49 64 0 85.49 0 112v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48V287.764c0-21.382-25.852-32.09-40.971-16.97z"/&gt;&lt;/svg&gt;OpenAccess](https://link.springer.com/article/10.1007/s00265-020-02921-1)&lt;br&gt;
 Los datos de prueba vienen de esa publicación. 
 
