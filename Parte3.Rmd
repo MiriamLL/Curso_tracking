@@ -1,0 +1,523 @@
+---
+title: "Editar<br>GPS"
+author: "Miriam Lerma"
+date: "Abril 2021"
+output:
+  xaringan::moon_reader:
+    css: Curso_tracking.css
+    seal: false
+    nature:
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: true
+      
+---
+
+class: title-slide, inverse, middle, right
+background-image: url(https://raw.githubusercontent.com/MiriamLL/Curso_tracking/main/03Figuras/PortadaC.jpg)
+background-size: cover
+
+```{r include = FALSE}
+#Paquetes
+library(xaringanExtra)
+library(fontawesome)
+xaringanExtra::use_clipboard()
+```
+
+class: title-slide, inverse, middle, right
+
+<h1>`r fa("cut", fill = "#264653")` `r fa("cut", fill = "#203C46")` `r fa("cut", fill = "#2D5462")` `r fa("cut", fill = "#3A6C7E")` `r fa("cut", fill = "#4D90A8")` 
+
+# `r rmarkdown::metadata$title`
+
+## **`r rmarkdown::metadata$author`**<br>
+`r rmarkdown::metadata$date`
+
+<h1>`r fa("cut", fill = "#264653")` `r fa("cut", fill = "#203C46")` `r fa("cut", fill = "#2D5462")` `r fa("cut", fill = "#3A6C7E")` `r fa("cut", fill = "#4D90A8")` 
+
+---
+
+# Intro
+
+En esta presentación verán como:
+- Cortar periodos dentro de nuestros tracks
+
+```{r, echo=FALSE,include=FALSE, message=FALSE}
+library(emo)
+library(here)
+library(ggplot2)
+LinkColor<-'#264653'
+LetterColor<-'#22577a'
+```
+
+--
+
+## Ustedes
+
+- Tienes una base de datos con datos de GPS <br>
+- Tienen conocimientos básicos de R, si no te recomiendo [`r fa("external-link-alt", fill = LinkColor)`empezar por aquí](https://miriamlerma.netlify.app/posts/2021-03-01-introar/) <br>
+
+---
+
+# Intro
+
+- A menudo los GPS deben ser activados antes de colocarse, y son apagados tiempo después de ser recolectados. 
+- Por eso es importante registrar la hora de inicio (cuando estaba en el animal) y cuando fue retirado. <br> 
+- Con esta información podemos editar nuestros datos colectados de GPS para que correspondan solo al periodo en el que estuvo en el animal.
+
+--
+
+<br> 
+
+Pero...
+.center[
+<h1>🙄</h1>]
+
+ .right[¿Como los recortamos?]
+
+
+---
+
+class:center,middle
+
+<h3>`r fa("download", fill = LetterColor)`
+
+## 1. Importar datos a R
+
+Para esta parte necesitas saber cargar tus datos, si necesitas recordar como hacerlo, te recomiendo [`r fa("external-link-alt", fill = LinkColor)`empezar por aquí](https://miriamll.github.io/Curso_tracking/Parte1).
+
+---
+
+### 1.1. Cargar datos
+
+Para cargar datos de prueba.<br>
+Puedes instalar el paquete 'sula'
+```{r, eval=FALSE,message=FALSE, warning=FALSE}
+remotes::install_github("MiriamLL/sula")
+```
+
+Cargar datos
+```{r, message=FALSE, warning=FALSE}
+library(sula)
+GPS_originales<-GPSdata
+head(GPS_originales)
+```
+
+---
+
+class:center,middle
+
+<h1>`r fa("cut", fill = LetterColor)`
+
+## 2. Recortar
+Para esta parte tus datos deben ser transformados al formato POSIXct, si necesitas más información [`r fa("external-link-alt", fill = LinkColor)`ve aquí](https://miriamll.github.io/Curso_tracking/Parte2#1).
+
+---
+
+### 2.1. Hora inicio y hora final.
+
+Para convertir a formato día y hora, unimos las columnas de día y hora en nuestros datos de GPS y usamos el argumento POSIXct para que R entienda que son día y hora.
+```{r}
+GPS_originales$diahora<-paste(GPS_originales$DateGMT,
+                              GPS_originales$TimeGMT)
+
+GPS_originales$diahora<-as.POSIXct(strptime(GPS_originales$diahora,
+                                            "%d/%m/%Y %H:%M:%S"),"GMT")
+```
+
+---
+
+### 2.2. Hora inicio y hora final.
+
+Supongamos que queremos recortar periodos del track del GPS01 que se coloco a las 18:10:00 del 02/11/2017 y se retiro a las 14:10:00 el 05/11/2017.
+
+Primero podemos elegir al individuo.
+```{r}
+GPS01<-subset(GPS_originales,GPS_originales$IDs=='GPS01')
+```
+
+Despues, podemos escribir manualmente la hora de inicio y final. <br>
+```{r}
+Hora_inicio<-'02/11/2017 18:10:00'
+Hora_final<-'05/11/2017 14:10:00'
+```
+
+Ambas horas se debe convertir a formato día y hora para que R entienda que son fecha y tiempo.<br>
+```{r}
+Hora_inicio<-as.POSIXct(strptime(Hora_inicio, "%d/%m/%Y %H:%M:%S"), "GMT") 
+Hora_final<- as.POSIXct(strptime(Hora_final, "%d/%m/%Y %H:%M:%S"), "GMT") 
+```
+
+Apareceran Hora_inicio y Hora_final en tu **environment** en la sección de **values**
+
+---
+
+### 2.3. Errores comunes
+
+Presta mucho atencion a como tienes ordenados tus datos.<br>
+- Verifica si usas **/** o **-** para separar tus fechas, o que otro separador puede existir en tus datos.
+
+Para el formato '21-12-2017 05:30:01'.
+```{r, eval=FALSE}
+format = "%d-%m-%Y %H:%M:%S"
+```
+
+Para el formato '2017/12/21 05:30:01'.
+```{r, eval=FALSE}
+format = "%Y/%m/%d %H:%M:%S"
+```
+
+
+---
+
+### 2.4. Columna track
+
+Para eliminar periodos dentro de nuestros datos. Yo utilice la función mutate de la libreria dplyr dentro de tidyverse, para agregar una columna con Y o N,  siendo **N** el periodo que queremos eliminar.  
+```{r, message=FALSE, warning=FALSE}
+library(tidyverse)
+```
+
+No es necesario crear esa columna, se puede usar **filter** directo pero a mí me gusta verificar primero.  
+```{r}
+GPS01<-mutate(GPS01,
+              track = ifelse(GPS01$diahora >= Hora_inicio & 
+                                GPS01$diahora <= Hora_final, 
+                                "Y","N"))
+```
+Ahora tendras en tu GPS01 una nueva columna llamada track. 
+
+---
+
+### 2.4. Eliminar periodos dentro de nuestros datos
+
+Usando informacion de la columna **track** filtre para quedarme solo con el periodo que me interesa. 
+
+**Opción 1**: usando la función **filter**
+```{r}
+GPS01_opcion1<-GPS01 %>% filter(track=='Y')
+```
+
+**Opción 2**: usando la función **subset**
+```{r}
+GPS01_opcion2<-subset(GPS01,GPS01$track=='Y')
+```
+Nota que el numero de observaciones se reduce y las dos opciones dan resultados idénticos.
+
+.center[
+<h1>🥳</h1>
+]
+
+---
+class:center,middle
+
+<h1>`r fa("book-open", fill = LetterColor)`
+
+## 3. Libreta de campo
+Como usar datos de un data frame ya en csv para cortar periodos en nuestros datos de GPS.
+
+---
+
+### 3.1. Libreta de campo
+
+Puede que tengas las observaciones en una libreta de campo, en un formato parecido a este:
+```{r,comment=NA}
+Datos_campo<-data.frame(Hora_inicio=Hora_inicio,
+                       Hora_final=Hora_final)
+Datos_campo
+```
+
+---
+
+### 3.2. Horas en la libreta
+
+Para extraer datos puedes extraer información directamente de tus filas y columnas usando [Fila,Columna].<br> Si necesitas mas información [`r fa("external-link-alt", fill = "#22577a")`ve aqui](https://miriamll.github.io/Curso_CIAD/Clase3Parte1#24)
+
+```{r}
+Hora_inicio<-Datos_campo[1,1]
+Hora_final<-Datos_campo[1,2]
+Hora_inicio<-as.POSIXct(strptime(Hora_inicio, "%Y-%m-%d %H:%M:%S"), "GMT") 
+Hora_final<- as.POSIXct(strptime(Hora_final, "%Y-%m-%d %H:%M:%S"), "GMT") 
+```
+- Hora de inicio esta en la primera fila y primera columna por eso [1,1]. 
+- Hora final esta en la primera fila y la segunda columna por eso [1,2]
+- Después ambas se transformaron a formato fecha hora para que R entienda que son hora y día.
+
+---
+
+### 3.3. Recortar 
+
+Ahora puedes usar esa información para recortar los tracks.
+```{r}
+GPS01_opcion3<-mutate(GPS01, 
+                      tracks = ifelse(GPS01$diahora >= Hora_inicio & 
+                                        GPS01$diahora <= Hora_final, 
+                                        "Y","N"))
+GPS01_opcion3<-GPS01_opcion3 %>% 
+  filter(tracks=='Y')
+```
+
+Revisa que los datos se encuentren dentro de los rangos esperados.
+```{r}
+range(GPS01_opcion3$diahora)
+```
+
+.center[
+<h1>🥳</h1>
+]
+
+
+---
+
+class:center,middle
+
+<h1>`r fa("book-open", fill = LetterColor)`
+
+## 4. Funciones
+Como usar funciones para cortar periodos en nuestros datos de GPS cuando tenemos muchos individuos.
+
+---
+
+
+### 4.1. Datos de libreta
+
+Es probable que tengamos una libreta con muchas horas de inicio y final, y el identificador del individuo.
+
+Crearemos un ejemplo:
+```{r}
+IDs<-c("GPS01","GPS02","GPS03","GPS04","GPS05","GPS06","GPS07","GPS08","GPS09","GPS10")
+Hora_inicio<-c('03/11/2017 08:00:00', '03/11/2017 09:00:00','03/11/2017 10:00:00','03/11/2017 11:00:00','03/11/2017 12:00:00','03/11/2017 13:00:00','25/11/2017 14:00:00','25/11/2017 15:00:00','25/11/2017 16:00:00','25/11/2017 17:00:00')
+Hora_final<-c('05/11/2017 14:00:00','05/11/2017 15:00:00','05/11/2017 16:00:00','05/11/2017 17:00:00','05/11/2017 18:00:00','05/11/2017 19:00:00','26/11/2017 20:00:00','26/11/2017 21:00:00','26/11/2017 22:00:00','26/11/2017 23:00:00')
+Datos_campo<-data.frame(IDs=IDs,
+                       Hora_inicio=Hora_inicio,
+                       Hora_final=Hora_final)
+head(Datos_campo)
+```
+
+---
+
+### 4.2. Basicos de una funcion
+
+Una función nos permite ahorrarnos el tiempo de escribir todos los pasos.
+
+**Nota** Recuerda cambiar tus datos a formato fecha y hora.
+```{r}
+GPS_originales$diahora<-paste(GPS_originales$DateGMT,GPS_originales$TimeGMT)
+GPS_originales$diahora<-as.POSIXct(strptime(GPS_originales$diahora, "%d/%m/%Y %H:%M:%S"),  "GMT")
+```
+
+Para crear una función se usa el argumento **function** y corchetes.
+```{r, eval=FALSE}
+Nombre_de_la_funcion<-function(){}
+```
+.right[...pero no entrare en detalles.<br>
+
+Si quieres aprender mas sobre funciones [`r fa("external-link-alt", fill = LinkColor)` ve aqui](https://es.r4ds.hadley.nz/funciones.html)]
+
+---
+
+### 4.2. Función
+
+Si no quieres crear tu propia función, usa la siguiente función pero asegúrate de tener:
+1. Un data frame con tus datos de GPS con cinco columnas siendo la 5ta IDs y una columna **diahora** (en POSIXct).
+2. Un data frame con tus datos de campo con el nombre **Datos_campo** que contenga tres columnas (IDs, Hora_inicio y Hora_final).
+```{r}
+cortar_viaje<-function(GPS_id=GPS_id){
+  Nombre<-as.character(GPS_id[1,5]) #5ta columna es IDs
+  Horas<-subset(Datos_campo,Datos_campo$IDs==Nombre)
+  Hora_inicio<-Horas[1,2] #2nda columna es Hora_inicio
+  Hora_final<-Horas[1,3]  #3era columna es Hora_final
+  Hora_inicio<- as.POSIXct(strptime(Hora_inicio, "%d/%m/%Y %H:%M:%S"), tz='GMT') 
+  Hora_final<- as.POSIXct(strptime(Hora_final, "%d/%m/%Y %H:%M:%S"), tz='GMT') 
+  GPS_recortado<-mutate(GPS_id,track=ifelse(GPS_id$diahora>=Hora_inicio & #columna diahora
+                                              GPS_id$diahora<=Hora_final,"Y","N"))#columna diahora
+  GPS_recortado<-GPS_recortado %>% filter(track=='Y')
+  assign(paste0(Nombre,"_recortado"),GPS_recortado,envir=.GlobalEnv)}
+```
+Cuando cargas tu funcion te aparece el el **environment** en la parte de **Functions**
+---
+
+### 4.4. cortar_viaje
+
+En la dispositiva anterior creamos una funcion que se llama **cortar_viaje**. <br>
+Para que haga algo hay que darle argumentos.
+Por ejemplo, el nombre del objeto GPS01
+```{r}
+GPS01<-subset(GPS_originales,GPS_originales$IDs=='GPS01')
+cortar_viaje(GPS01)
+```
+Al final la funcion agrega un nuevo objeto a tu environment con el nombre del GPS y "_recortado". En este caso creara **GPS01_recortado**
+
+Tambien se puede usar:
+```{r}
+cortar_viaje(subset(GPS_originales,GPS_originales$IDs=='GPS02'))
+```
+Las dos opciones funcionan.
+
+.center[
+<h1>🥳</h1>
+]
+
+---
+
+class:center,middle
+
+<h1>`r fa("book-open", fill = LetterColor)`
+
+## 5. Iteraciones
+Como usar iteraciones cortar periodos en nuestros datos de GPS cuando tenemos muchos individuos en una lista.
+
+
+---
+
+### 5.1. Listas
+
+Para crear una lista podemos usar la siguiente funcion.
+```{r}
+Lista_GPS<-split(GPS_originales,GPS_originales$IDs)
+```
+Ahora aparecera en tu **environment** Lista_GPS, y este objeto es una **Large list**. 
+
+Podemos acceder a elementos individuales de esta lista.
+Por ejemplo:
+```{r}
+GPS01_opcion4<-Lista_GPS[[1]]
+```
+
+Y con esta serie de pasos podemos recortar el periodo que nos interesa. <br> 
+```{r}
+Nombre<-as.character(GPS01_opcion4[1,5])
+Horas<-subset(Datos_campo,Datos_campo$IDs==Nombre)
+Hora_inicio<-Horas[1,2]
+Hora_final<-Horas[1,3]
+Hora_inicio<- as.POSIXct(strptime(Hora_inicio, "%d/%m/%Y %H:%M:%S"), tz='GMT') 
+Hora_final<- as.POSIXct(strptime(Hora_final, "%d/%m/%Y %H:%M:%S"), tz='GMT') 
+Lista_GPS[[1]]<-mutate(GPS01_opcion4,track=ifelse(GPS01_opcion4$diahora>=Hora_inicio & GPS01_opcion4$diahora<=Hora_final,"Y","N"))
+```
+**Son los mismos pasos que vimos anteriormente.**
+
+---
+
+### 5.2. Aplicar
+
+Pero para no hacer individuo por individuo, podemos hacer una **iteracion** que se aplique a todos los elementos de la lista
+
+.right[...pero no entrare en detalles.<br>
+
+Si quieres aprender mas sobre iteraciones [`r fa("external-link-alt", fill = LinkColor)` ve aqui](https://es.r4ds.hadley.nz/iteraci%C3%B3n.html)]
+
+Si quieres usar esta **iteracion**, solo asegurate de 
+- Tener una lista con los datos de tus GPS que contenga una columna IDs y **diahora** en formato POSIXct
+- Tener una objeto llamado **Datos_campo** con IDs, Hora_inicio y Hora_final
+```{r}
+for( i in seq_along(Lista_GPS)){
+  GPS_id<-Lista_GPS[[i]]
+  Nombre<-as.character(GPS_id[1,5]) #columa IDs
+  Horas<-subset(Datos_campo,Datos_campo$IDs==Nombre) #Datos_campo
+  Hora_inicio<- as.POSIXct(strptime(Horas[1,2], "%d/%m/%Y %H:%M:%S"), tz='GMT') 
+  Hora_final<- as.POSIXct(strptime(Horas[1,3], "%d/%m/%Y %H:%M:%S"), tz='GMT') 
+  Lista_GPS[[i]]<-mutate(GPS_id,track= ifelse(GPS_id$diahora>=Hora_inicio & #diahora
+                                    GPS_id$diahora<=Hora_final,"Y","N")) 
+  }
+```
+
+---
+
+### 5.3. Data frame
+
+Puedes volver a pegar los elementos de tu lista en un data frame.
+```{r}
+GPS_nuevo<- do.call("rbind",Lista_GPS)
+```
+
+Y quedarte solo con los periodos que te interesan.
+```{r}
+GPS_recortados<-GPS_nuevo %>% filter(track=='Y')
+```
+
+Listo!
+.center[
+<h1>🥳</h1>
+]
+
+---
+
+## 5.4. Comparar
+
+Si quieres comparar los cambios y ver si todo funciono.
+
+Estos eran los datos originales, el numero debajo de ID corresponde al numero de observaciones.
+```{r}
+table(GPS_originales$IDs)
+```
+
+Estos son los datos recortados
+```{r}
+table(GPS_recortados$IDs)
+```
+
+Como vez, tenemos menos datos que en el archivo original. Eso significa que logramos cortar periodos en los tracks de manera **exitosa**
+
+---
+
+class: center, middle
+
+<h1>`r fa("file-export", fill = "#22577a")`
+
+# 6. Exportar 
+Para esta parte necesitas saber exportar tus datos, si necesitas recordar como hacerlo, te recomiendo [`r fa("external-link-alt", fill = "#22577a")`empezar por aquí](https://miriamll.github.io/Curso_CIAD/Clase3Parte2#54).
+
+---
+
+### 6.1. Exportar 
+
+De acuerdo a lo que quieras hacer, puedes exportar los GPS de manera individual
+```{r, eval=FALSE}
+GPS01
+```
+
+O puedes exportar todos los GPS recortados
+```{r, eval=FALSE}
+GPS_recortados
+```
+
+Seleccionar la carpeta.
+```{r}
+library(here)
+DatosFolder<-here::here("01Datos")
+```
+
+Seleccionar archivo y el nombre de tu nuevo data frame.  
+```{r, eval=FALSE}
+write_csv(
+  GPS_recortados,
+  file=paste0(DatosFolder,'/GPS_recortados.csv'))
+```
+
+
+---
+
+## 7. Contacto
+
+Para dudas, comentarios y sugerencias:  
+- Escríbeme a miriamjlerma@gmail.com
+
+Este material esta accesible y se encuentra en 
+- mi [`r fa("external-link-alt", fill = LinkColor)`github](https://github.com/MiriamLL/Curso_tracking/).
+
+<br>
+
+Si quieres dar créditos puedes usar:
+- Lerma M (2021) Package sula. Proximamente con zenodo.
+- Lerma M, Dehnhard N, Luna-Jorquera G, Voigt CC, Garthe S (2020) Breeding stage, not sex, affects foraging characteristics in masked boobies at Rapa Nui. Behavioral ecology and sociobiology 74: 149 [`r fa("external-link-alt", fill = LinkColor)`OpenAccess](https://link.springer.com/article/10.1007/s00265-020-02921-1)<br>
+Los datos de prueba vienen de esa publicación. 
+
+<br>
+<br>
+
+
+.center[
+```{r, echo=FALSE}
+library(fontawesome)
+```
+<h3>`r fa("home", fill = LinkColor)`[Volver ](https://miriamlerma.netlify.app/posts/2021-03-16-biologging/)
+]

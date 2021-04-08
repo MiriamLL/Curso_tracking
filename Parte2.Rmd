@@ -114,12 +114,12 @@ Primero unimos las columnas de día y hora en los datos de GPS y convertimos al 
 
 Para unirlos en una columna:
 ```{r}
-Todos_GPS$DiaHora<-paste(Todos_GPS$DateGMT,Todos_GPS$TimeGMT)
+Todos_GPS$diahora<-paste(Todos_GPS$DateGMT,Todos_GPS$TimeGMT)
 ```
 
 Para decirle que son día y hora:
 ```{r}
-Todos_GPS$DiaHora<-as.POSIXct(strptime(Todos_GPS$DiaHora, 
+Todos_GPS$diahora<-as.POSIXct(strptime(Todos_GPS$diahora, 
                                        "%d/%m/%Y %H:%M:%S"),"GMT")
 ```
 
@@ -160,20 +160,20 @@ Para el formato '2017/12/21 05:30:01'.
 
 Verifica que tus datos no tengan NAs ni ceros en día y hora.
 ```{r}
-range(Todos_GPS$DiaHora)
+range(Todos_GPS$diahora)
 ```
 
 Si tienes **NAs**, deberas sacarlos, puedes usar la libreria tidyverse.
 ```{r, message=FALSE, warning=FALSE}
 library(tidyverse)
 Todos_GPS_Limpio<-Todos_GPS%>%
-  drop_na(DiaHora)
+  drop_na(diahora)
 ```
 
 Si tienes ceros, puedes usar **filter** y **!=** que significa **diferente de**.
 ```{r}
 Todos_GPS_Limpio<-Todos_GPS%>%
-  filter(DiaHora != 0)
+  filter(diahora != 0)
 ```
 
 ---
@@ -200,12 +200,12 @@ Opcion1<-Todos_GPS
 
 Supongamos que para nuestros datos tenemos 5 horas de diferencia.  
 
-Para restar las 5 horas, creamos una columna que se llama HoraReal, no es necesario pero sirve para verificar que todo este correcto.
+Para restar las 5 horas, creamos una columna que se llama hora_corregida, no es necesario pero sirve para verificar que todo este correcto.
 ```{r}
 Opcion1<-Opcion1 %>%
-  mutate(HoraReal = DiaHora - 5*60*60)
+  mutate(hora_corregida = diahora - 5*60*60)
 ```
-Nota que hora se resta a la columna DiaHora y las cinco horas se multiplican por los minutos y segundos.
+Nota que hora se resta a la columna diahora y las cinco horas se multiplican por los minutos y segundos.
 
 ---
 
@@ -213,13 +213,17 @@ Nota que hora se resta a la columna DiaHora y las cinco horas se multiplican por
 
 Listo!
 ```{r}
-head(Opcion1$HoraReal,5)
+head(Opcion1$hora_corregida,5)
 ```
 
 Verificar
 ```{r}
-range(Opcion1$HoraReal)
+range(Opcion1$hora_corregida)
 ```
+
+.center[
+<h1>🥳</h1>
+]
 
 ---
 
@@ -237,15 +241,15 @@ Opcion2<-Todos_GPS
 
 Convertir usando dmy_hms
 ```{r}
-Opcion2$DiaHora<-paste(Opcion2$DateGMT,Opcion2$TimeGMT)
-Opcion2$DiaHora<-dmy_hms(Opcion2$DiaHora)
+Opcion2$diahora<-paste(Opcion2$DateGMT,Opcion2$TimeGMT)
+Opcion2$diahora<-dmy_hms(Opcion2$diahora)
 ```
 
 Restar los segundos de diferencia
 ```{r}
-Opcion2$HoraReal <- Opcion2$DiaHora - 3600*5
+Opcion2$hora_corregida <- Opcion2$diahora - 3600*5
 ```
-Nota que hora se resta a la columna DiaHora y las cinco horas se multiplican por los minutos y segundos.
+Nota que hora se resta a la columna diahora y las cinco horas se multiplican por los minutos y segundos.
 
 ---
 
@@ -253,13 +257,17 @@ Nota que hora se resta a la columna DiaHora y las cinco horas se multiplican por
 
 Listo!
 ```{r}
-head(Opcion2$HoraReal,5)
+head(Opcion2$hora_corregida,5)
 ```
 
 Verificar
 ```{r}
-range(Opcion2$HoraReal)
+range(Opcion2$hora_corregida)
 ```
+
+.center[
+<h1>🥳</h1>
+]
 
 ---
 
@@ -277,7 +285,7 @@ library(lubridate)
 
 El formato original es probablemente tz Europe/Amsterdam
 ```{r}
-Opcion3$Hora<-ymd_hms(Opcion3$DiaHora, tz = "Europe/Amsterdam")
+Opcion3$Hora<-ymd_hms(Opcion3$diahora, tz = "Europe/Amsterdam")
 ```
 
 ```{r}
@@ -290,19 +298,23 @@ head(Opcion3$Hora)
 
 Para cambiarlo usar **with_tz**.
 ```{r}
-Opcion3$HoraReal <- with_tz(Opcion3$Hora,tzone = "America/La_Paz")
+Opcion3$hora_corregida <- with_tz(Opcion3$Hora,tzone = "America/La_Paz")
 ```
 
 
 Listo!
 ```{r}
-head(Opcion3$HoraReal,5)
+head(Opcion3$hora_corregida,5)
 ```
 
 Verificar
 ```{r}
-range(Opcion3$HoraReal)
+range(Opcion3$hora_corregida)
 ```
+
+.center[
+<h1>🥳</h1>
+]
 
 ---
 
@@ -317,8 +329,6 @@ OlsonNames()
 Te van a aparecer muchos resultados.
 
 Otra opción es ver la [`r fa("external-link-alt", fill = "#22577a")`lista en Wikipedia](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).
-
-
 
 ---
 

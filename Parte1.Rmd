@@ -41,7 +41,6 @@ background-size: cover
 En esta presentación verán como:
 - Importar datos a R
 - Agregar columna ID
-- Eliminar periodos dentro de nuestros datos
 - Graficar trayectorias
 - Exportar nuestro nuevo data frame
 
@@ -56,7 +55,7 @@ library(ggplot2)
 
 ## Ustedes
 
-- Quieren importar sus datos de GPS a R y limpiarlos <br>
+- Quieren importar sus datos de GPS a R <br>
 - Tienen conocimientos básicos de R, si no te recomiendo [`r fa("external-link-alt", fill = "#22577a")`empezar por aquí ](https://miriamlerma.netlify.app/posts/2021-03-01-introar/) <br>
   
 ---
@@ -236,87 +235,29 @@ Pero **ojo** el numero de columnas y nombres de las columnas debe ser el mismo.
 Todos_GPS
 ```
 
-
----
-
-class:center,middle
-
-<h1>`r fa("cut", fill = "#22577a")`
-
-## 2. Recortar
-Para esta parte puedes necesitar algunos básicos de como manipular data frames en R, si necesitas más información [`r fa("external-link-alt", fill = "#22577a")`ve aquí](https://miriamll.github.io/Curso_CIAD/Clase3Parte2#1).
-
----
-
-### 2.1. Hora inicio y hora final.
-
-Supongamos que el GPS01, se coloco a las 18:10:00 del 02/11/2017 y se retiro a las 14:10:00 el 05/11/2017.
-
-Se debe convertir la hora de inicio y la hora final a formato día y hora.
-```{r}
-HoraInicio<-'02/11/2017 18:10:00'
-HoraInicio<-as.POSIXct(strptime(HoraInicio, "%d/%m/%Y %H:%M:%S"), "GMT") 
-```
-
-```{r}
-HoraFinal<-'05/11/2017 14:10:00'
-HoraFinal<- as.POSIXct(strptime(HoraFinal, "%d/%m/%Y %H:%M:%S"), "GMT") 
-```
-
-Se deben unir las columnas de fecha y tiempo en nuestros datos de GPS y convertir al formato POSIXct para que R entienda que son hora y día.
-```{r}
-GPS01_txt$tStamp<-paste(GPS01_txt$DateGMT,GPS01_txt$TimeGMT)
-GPS01_txt$tStamp1<-as.POSIXct(strptime(GPS01_txt$tStamp, "%d/%m/%Y %H:%M:%S"),  "GMT")
-```
-
----
-
-### 2.2. Eliminar periodos dentro de nuestros datos
-
-Después se puede seleccionar solo el periodo que nos interesa.  
-Yo utilice la función mutate, que agregara una columna con Y o N,  siendo _N_ el periodo que queremos eliminar.  
-No es necesario crear esa columna, se puede usar **filter** directo pero a mí me gusta verificar primero.  
-```{r}
-GPS01<-mutate(GPS01_txt, Tracking = ifelse(GPS01_txt$tStamp1 >= HoraInicio & GPS01_txt$tStamp1 <= HoraFinal, "Y","N"))
-```
-
-Después filtre solo el periodo que me interesa. 
-
-**Opción 1**: usando la función **filter**
-```{r}
-GPS01<-GPS01 %>% 
-  filter(Tracking=='Y')
-```
-
-**Opción 2**: usando la función **subset**
-```{r}
-GPS01<-subset(GPS01,GPS01$Tracking=='Y')
-```
-Nota que el numero de observaciones se reduce.  
-
 ---
 
 class:center,middle
 
 <h1>`r fa("paint-brush", fill = "#22577a")`
 
-## 3. Graficar
+## 2. Graficar
 Para recordar los básicos de como realizar gráficos en R [`r fa("external-link-alt", fill = "#22577a")`ve aquí](https://miriamll.github.io/Curso_CIAD/Clase2#1).
 
 ---
 
-### 3.1. Trayectorias individuo
+### 2.1. Trayectorias individuo
 
 Para graficar un solo individuo.
 ```{r, out.width="40%"}
-ggplot(data = GPS01, aes(x = Latitude, y = Longitude)) +
+ggplot(data = GPS01_txt, aes(x = Latitude, y = Longitude)) +
   geom_path()+
   theme_bw()
 ```
 
 ---
 
-### 3.2. Trayectorias individuales
+### 2.2. Trayectorias individuales
 Para graficar varios individuos
 ```{r, out.width="40%"}
 ggplot(data = Todos_GPS, aes(x = Latitude, y = Longitude)) +
@@ -332,12 +273,12 @@ class: center, middle
 
 <h1>`r fa("file-export", fill = "#22577a")`
 
-# 4. Exportar 
+# 3. Exportar 
 Para esta parte necesitas saber exportar tus datos, si necesitas recordar como hacerlo, te recomiendo [`r fa("external-link-alt", fill = "#22577a")`empezar por aquí](https://miriamll.github.io/Curso_CIAD/Clase3Parte2#54).
 
 ---
 
-## 4.1. Exportar 
+## 3.1. Exportar 
 
 Seleccionar la carpeta.
 ```{r}
@@ -355,7 +296,7 @@ write_csv(
 ---
 
 
-## 5. Contacto
+## 4. Contacto
 
 - Para dudas, comentarios y sugerencias:  
 Escríbeme a miriamjlerma@gmail.com
