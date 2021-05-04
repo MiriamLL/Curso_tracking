@@ -5,10 +5,6 @@
     <meta charset="utf-8" />
     <meta name="author" content="Miriam Lerma" />
     <script src="Parte3_files/header-attrs-2.6/header-attrs.js"></script>
-    <script src="Parte3_files/clipboard-2.0.6/clipboard.min.js"></script>
-    <link href="Parte3_files/xaringanExtra-clipboard-0.2.4/xaringanExtra-clipboard.css" rel="stylesheet" />
-    <script src="Parte3_files/xaringanExtra-clipboard-0.2.4/xaringanExtra-clipboard.js"></script>
-    <script>window.xaringanExtraClipboard(null, {"button":"Copy Code","success":"Copied!","error":"Press Ctrl+C to Copy"})</script>
     <link rel="stylesheet" href="Curso_tracking.css" type="text/css" />
   </head>
   <body>
@@ -37,7 +33,15 @@ Abril 2021
 # Intro
 
 En esta presentación verán como:
-- Cortar periodos dentro de nuestros tracks
+- [Cargar datos de GPS](#cargar) &lt;br&gt;
+- Recortar periodos de [un solo individuo](#uno)&lt;br&gt;
+[Usando paquete sula](#sula)&lt;br&gt;
+[Convertir a formato dia y hora](#convertir)&lt;br&gt;
+- Recortar periodos de [múltiples individuos](#varios)&lt;br&gt;
+[Usando paquete sula](#sula2)&lt;br&gt;
+[Usando función](#funcion)&lt;br&gt;
+[Usando iteración](#funcion)&lt;br&gt;
+- [Exportar datos](#exportar) &lt;br&gt;
 
 
 
@@ -46,11 +50,11 @@ En esta presentación verán como:
 ## Ustedes
 
 - Tienes una base de datos con datos de GPS &lt;br&gt;
-- Tienen conocimientos básicos de R, si no te recomiendo [&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#264653;" viewBox="0 0 576 512"&gt;&lt;path d="M576 24v127.984c0 21.461-25.96 31.98-40.971 16.971l-35.707-35.709-243.523 243.523c-9.373 9.373-24.568 9.373-33.941 0l-22.627-22.627c-9.373-9.373-9.373-24.569 0-33.941L442.756 76.676l-35.703-35.705C391.982 25.9 402.656 0 424.024 0H552c13.255 0 24 10.745 24 24zM407.029 270.794l-16 16A23.999 23.999 0 0 0 384 303.765V448H64V128h264a24.003 24.003 0 0 0 16.97-7.029l16-16C376.089 89.851 365.381 64 344 64H48C21.49 64 0 85.49 0 112v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48V287.764c0-21.382-25.852-32.09-40.971-16.97z"/&gt;&lt;/svg&gt;empezar por aquí](https://miriamlerma.netlify.app/posts/2021-03-01-introar/) &lt;br&gt;
+- Tienen conocimientos básicos de R, si no te recomiendo [&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#e63946;" viewBox="0 0 576 512"&gt;&lt;path d="M576 24v127.984c0 21.461-25.96 31.98-40.971 16.971l-35.707-35.709-243.523 243.523c-9.373 9.373-24.568 9.373-33.941 0l-22.627-22.627c-9.373-9.373-9.373-24.569 0-33.941L442.756 76.676l-35.703-35.705C391.982 25.9 402.656 0 424.024 0H552c13.255 0 24 10.745 24 24zM407.029 270.794l-16 16A23.999 23.999 0 0 0 384 303.765V448H64V128h264a24.003 24.003 0 0 0 16.97-7.029l16-16C376.089 89.851 365.381 64 344 64H48C21.49 64 0 85.49 0 112v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48V287.764c0-21.382-25.852-32.09-40.971-16.97z"/&gt;&lt;/svg&gt;empezar por aquí](https://miriamlerma.netlify.app/posts/2021-03-01-introar/) &lt;br&gt;
 
 ---
 
-# Intro
+# Motivación
 
 - A menudo los GPS deben ser activados antes de colocarse, y son apagados tiempo después de ser recolectados. 
 - Por eso es importante registrar la hora de inicio (cuando estaba en el animal) y cuando fue retirado. &lt;br&gt; 
@@ -75,9 +79,10 @@ class:center,middle
 
 ## 1. Importar datos a R
 
-Para esta parte necesitas saber cargar tus datos, si necesitas recordar como hacerlo, te recomiendo [&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#264653;" viewBox="0 0 576 512"&gt;&lt;path d="M576 24v127.984c0 21.461-25.96 31.98-40.971 16.971l-35.707-35.709-243.523 243.523c-9.373 9.373-24.568 9.373-33.941 0l-22.627-22.627c-9.373-9.373-9.373-24.569 0-33.941L442.756 76.676l-35.703-35.705C391.982 25.9 402.656 0 424.024 0H552c13.255 0 24 10.745 24 24zM407.029 270.794l-16 16A23.999 23.999 0 0 0 384 303.765V448H64V128h264a24.003 24.003 0 0 0 16.97-7.029l16-16C376.089 89.851 365.381 64 344 64H48C21.49 64 0 85.49 0 112v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48V287.764c0-21.382-25.852-32.09-40.971-16.97z"/&gt;&lt;/svg&gt;empezar por aquí](https://miriamll.github.io/Curso_tracking/Parte1).
+Para esta parte necesitas saber cargar tus datos, si necesitas recordar como hacerlo, te recomiendo [&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#e63946;" viewBox="0 0 576 512"&gt;&lt;path d="M576 24v127.984c0 21.461-25.96 31.98-40.971 16.971l-35.707-35.709-243.523 243.523c-9.373 9.373-24.568 9.373-33.941 0l-22.627-22.627c-9.373-9.373-9.373-24.569 0-33.941L442.756 76.676l-35.703-35.705C391.982 25.9 402.656 0 424.024 0H552c13.255 0 24 10.745 24 24zM407.029 270.794l-16 16A23.999 23.999 0 0 0 384 303.765V448H64V128h264a24.003 24.003 0 0 0 16.97-7.029l16-16C376.089 89.851 365.381 64 344 64H48C21.49 64 0 85.49 0 112v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48V287.764c0-21.382-25.852-32.09-40.971-16.97z"/&gt;&lt;/svg&gt;empezar por aquí](https://miriamll.github.io/Curso_tracking/Parte1).
 
 ---
+name: cargar
 
 ### 1.1. Cargar datos
 
@@ -88,62 +93,87 @@ Puedes instalar el paquete 'sula'
 remotes::install_github("MiriamLL/sula")
 ```
 
-Cargar datos
+Cargar datos de un solo individuo
 
 ```r
 library(sula)
-GPS_originales&lt;-GPSdata
-head(GPS_originales)
+GPS_01&lt;-GPS_01
 ```
 
-```
-## # A tibble: 6 x 5
-##   Latitude Longitude DateGMT    TimeGMT  IDs  
-##      &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;      &lt;chr&gt;    &lt;chr&gt;
-## 1    -27.2     -109. 02/11/2017 17:05:30 GPS01
-## 2    -27.2     -109. 02/11/2017 17:09:35 GPS01
-## 3    -27.2     -109. 02/11/2017 17:13:50 GPS01
-## 4    -27.2     -109. 02/11/2017 17:17:59 GPS01
-## 5    -27.2     -109. 02/11/2017 17:22:13 GPS01
-## 6    -27.2     -109. 02/11/2017 17:26:25 GPS01
+Cargar datos de diez individuos
+
+```r
+library(sula)
+GPS_diez&lt;-GPS_raw
 ```
 
 ---
-
+name:uno
 class:center,middle
 
 &lt;h1&gt;&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#22577a;" viewBox="0 0 448 512"&gt;&lt;path d="M278.06 256L444.48 89.57c4.69-4.69 4.69-12.29 0-16.97-32.8-32.8-85.99-32.8-118.79 0L210.18 188.12l-24.86-24.86c4.31-10.92 6.68-22.81 6.68-35.26 0-53.02-42.98-96-96-96S0 74.98 0 128s42.98 96 96 96c4.54 0 8.99-.32 13.36-.93L142.29 256l-32.93 32.93c-4.37-.61-8.83-.93-13.36-.93-53.02 0-96 42.98-96 96s42.98 96 96 96 96-42.98 96-96c0-12.45-2.37-24.34-6.68-35.26l24.86-24.86L325.69 439.4c32.8 32.8 85.99 32.8 118.79 0 4.69-4.68 4.69-12.28 0-16.97L278.06 256zM96 160c-17.64 0-32-14.36-32-32s14.36-32 32-32 32 14.36 32 32-14.36 32-32 32zm0 256c-17.64 0-32-14.36-32-32s14.36-32 32-32 32 14.36 32 32-14.36 32-32 32z"/&gt;&lt;/svg&gt;
 
-## 2. Recortar
-Para esta parte tus datos deben ser transformados al formato POSIXct, si necesitas más información [&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#264653;" viewBox="0 0 576 512"&gt;&lt;path d="M576 24v127.984c0 21.461-25.96 31.98-40.971 16.971l-35.707-35.709-243.523 243.523c-9.373 9.373-24.568 9.373-33.941 0l-22.627-22.627c-9.373-9.373-9.373-24.569 0-33.941L442.756 76.676l-35.703-35.705C391.982 25.9 402.656 0 424.024 0H552c13.255 0 24 10.745 24 24zM407.029 270.794l-16 16A23.999 23.999 0 0 0 384 303.765V448H64V128h264a24.003 24.003 0 0 0 16.97-7.029l16-16C376.089 89.851 365.381 64 344 64H48C21.49 64 0 85.49 0 112v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48V287.764c0-21.382-25.852-32.09-40.971-16.97z"/&gt;&lt;/svg&gt;ve aquí](https://miriamll.github.io/Curso_tracking/Parte2#1).
+## 2. Recortar usando un solo individuo
+Para esta parte tus datos deben ser transformados al formato POSIXct, si necesitas más información [&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#e63946;" viewBox="0 0 576 512"&gt;&lt;path d="M576 24v127.984c0 21.461-25.96 31.98-40.971 16.971l-35.707-35.709-243.523 243.523c-9.373 9.373-24.568 9.373-33.941 0l-22.627-22.627c-9.373-9.373-9.373-24.569 0-33.941L442.756 76.676l-35.703-35.705C391.982 25.9 402.656 0 424.024 0H552c13.255 0 24 10.745 24 24zM407.029 270.794l-16 16A23.999 23.999 0 0 0 384 303.765V448H64V128h264a24.003 24.003 0 0 0 16.97-7.029l16-16C376.089 89.851 365.381 64 344 64H48C21.49 64 0 85.49 0 112v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48V287.764c0-21.382-25.852-32.09-40.971-16.97z"/&gt;&lt;/svg&gt;ve aquí](https://miriamll.github.io/Curso_tracking/Parte2#1).
 
 ---
+name: sula
 
-### 2.1. Hora inicio y hora final.
+### 2.1. Usando paquete sula.
 
-Para convertir a formato día y hora, unimos las columnas de día y hora en nuestros datos de GPS y usamos el argumento POSIXct para que R entienda que son día y hora.
+Supongamos que queremos recortar periodos del track del GPS01 que se coloco a las 18:10:00 del 02/11/2017 y se retiro a las 14:10:00 el 05/11/2017.
+
+Esta función te permite recortar periodos dentro de tus datos.
 
 ```r
-GPS_originales$diahora&lt;-paste(GPS_originales$DateGMT,
-                              GPS_originales$TimeGMT)
+GPS_recortado&lt;-recortar_periodo(GPS_data=GPS_01,
+                                inicio='02/11/2017 18:10:00',
+                                final='05/11/2017 14:10:00',
+                                dia_col='DateGMT',
+                                hora_col='TimeGMT',
+                                formato="%d/%m/%Y %H:%M:%S")
+```
 
-GPS_originales$diahora&lt;-as.POSIXct(strptime(GPS_originales$diahora,
+```
+## El track original contenia 1038 filas y el track editado contiene 986 filas
+```
+
+Te regresa un dataframe solo con los periodos de interés.
+
+Listo!
+.center[
+&lt;h1&gt;🥳&lt;/h1&gt;
+]
+
+---
+name: convertir
+
+### 2.2. Convertir a formato día y hora
+
+Si quieres hacerlo lo mismo pero paso a paso.
+
+Para convertir a formato día y hora, debes unir las columnas de día y hora y usar el argumento POSIXct para que R entienda que son día y hora.
+
+Unir columnas
+
+```r
+GPS_01$diahora&lt;-paste(GPS_01$DateGMT,GPS_01$TimeGMT)
+```
+
+Transformar formato
+
+```r
+GPS_01$diahora&lt;-as.POSIXct(strptime(GPS_01$diahora,
                                             "%d/%m/%Y %H:%M:%S"),"GMT")
 ```
 
 ---
 
-### 2.2. Hora inicio y hora final.
+### 2.2. Convertir a formato día y hora
 
 Supongamos que queremos recortar periodos del track del GPS01 que se coloco a las 18:10:00 del 02/11/2017 y se retiro a las 14:10:00 el 05/11/2017.
 
-Primero podemos elegir al individuo.
-
-```r
-GPS01&lt;-subset(GPS_originales,GPS_originales$IDs=='GPS01')
-```
-
-Despues, podemos escribir manualmente la hora de inicio y final. &lt;br&gt;
+Podemos escribir manualmente la hora de inicio y final. &lt;br&gt;
 
 ```r
 Hora_inicio&lt;-'02/11/2017 18:10:00'
@@ -157,13 +187,13 @@ Hora_inicio&lt;-as.POSIXct(strptime(Hora_inicio, "%d/%m/%Y %H:%M:%S"), "GMT")
 Hora_final&lt;- as.POSIXct(strptime(Hora_final, "%d/%m/%Y %H:%M:%S"), "GMT") 
 ```
 
-Apareceran Hora_inicio y Hora_final en tu **environment** en la sección de **values**
+Aparecerán Hora_inicio y Hora_final en tu **environment** en la sección de **values**
 
 ---
 
 ### 2.3. Errores comunes
 
-Presta mucho atencion a como tienes ordenados tus datos.&lt;br&gt;
+Presta mucho atención a como tienes ordenados tus datos.&lt;br&gt;
 - Verifica si usas **/** o **-** para separar tus fechas, o que otro separador puede existir en tus datos.
 
 Para el formato '21-12-2017 05:30:01'.
@@ -181,40 +211,41 @@ format = "%Y/%m/%d %H:%M:%S"
 
 ---
 
-### 2.4. Columna track
+### 2.4. Eliminar periodos dentro de nuestros datos
 
-Para eliminar periodos dentro de nuestros datos. Yo utilice la función mutate de la libreria dplyr dentro de tidyverse, para agregar una columna con Y o N,  siendo **N** el periodo que queremos eliminar.  
+Paso a paso, para eliminar periodos dentro de nuestros datos.  
+Se puede utilizar la función mutate de la libreria dplyr dentro de tidyverse, para agregar una columna con Y o N,  siendo **N** el periodo que queremos eliminar.  
 
 ```r
 library(tidyverse)
 ```
 
-No es necesario crear esa columna, se puede usar **filter** directo pero a mí me gusta verificar primero.  
+No es necesario crear esa columna, pero es útil para verificar primero que funciono correctamente.    
 
 ```r
-GPS01&lt;-mutate(GPS01,
-              track = ifelse(GPS01$diahora &gt;= Hora_inicio &amp; 
-                                GPS01$diahora &lt;= Hora_final, 
+GPS_01&lt;-mutate(GPS_01,
+              track = ifelse(GPS_01$diahora &gt;= Hora_inicio &amp; 
+                                GPS_01$diahora &lt;= Hora_final, 
                                 "Y","N"))
 ```
-Ahora tendras en tu GPS01 una nueva columna llamada track. 
+Ahora tendras en tu GPS_01 una nueva columna llamada track. 
 
 ---
 
 ### 2.4. Eliminar periodos dentro de nuestros datos
 
-Usando informacion de la columna **track** filtre para quedarme solo con el periodo que me interesa. 
+Usando información de la columna **track** se pueden filtrar para quedar solo con el periodo que interesa. 
 
 **Opción 1**: usando la función **filter**
 
 ```r
-GPS01_opcion1&lt;-GPS01 %&gt;% filter(track=='Y')
+GPS01_opcion1&lt;-GPS_01 %&gt;% filter(track=='Y')
 ```
 
 **Opción 2**: usando la función **subset**
 
 ```r
-GPS01_opcion2&lt;-subset(GPS01,GPS01$track=='Y')
+GPS01_opcion2&lt;-subset(GPS_01,GPS_01$track=='Y')
 ```
 Nota que el numero de observaciones se reduce y las dos opciones dan resultados idénticos.
 
@@ -223,103 +254,26 @@ Nota que el numero de observaciones se reduce y las dos opciones dan resultados 
 ]
 
 ---
+name: varios
 class:center,middle
 
 &lt;h1&gt;&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#22577a;" viewBox="0 0 576 512"&gt;&lt;path d="M542.22 32.05c-54.8 3.11-163.72 14.43-230.96 55.59-4.64 2.84-7.27 7.89-7.27 13.17v363.87c0 11.55 12.63 18.85 23.28 13.49 69.18-34.82 169.23-44.32 218.7-46.92 16.89-.89 30.02-14.43 30.02-30.66V62.75c.01-17.71-15.35-31.74-33.77-30.7zM264.73 87.64C197.5 46.48 88.58 35.17 33.78 32.05 15.36 31.01 0 45.04 0 62.75V400.6c0 16.24 13.13 29.78 30.02 30.66 49.49 2.6 149.59 12.11 218.77 46.95 10.62 5.35 23.21-1.94 23.21-13.46V100.63c0-5.29-2.62-10.14-7.27-12.99z"/&gt;&lt;/svg&gt;
 
-## 3. Libreta de campo
-Como usar datos de un data frame ya en csv para cortar periodos en nuestros datos de GPS.
-
----
-
-### 3.1. Libreta de campo
-
-Puede que tengas las observaciones en una libreta de campo, en un formato parecido a este:
-
-```r
-Datos_campo&lt;-data.frame(Hora_inicio=Hora_inicio,
-                       Hora_final=Hora_final)
-Datos_campo
-```
-
-```
-          Hora_inicio          Hora_final
-1 2017-11-02 18:10:00 2017-11-05 14:10:00
-```
-
----
-
-### 3.2. Horas en la libreta
-
-Para extraer datos puedes extraer información directamente de tus filas y columnas usando [Fila,Columna].&lt;br&gt; Si necesitas mas información [&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#22577a;" viewBox="0 0 576 512"&gt;&lt;path d="M576 24v127.984c0 21.461-25.96 31.98-40.971 16.971l-35.707-35.709-243.523 243.523c-9.373 9.373-24.568 9.373-33.941 0l-22.627-22.627c-9.373-9.373-9.373-24.569 0-33.941L442.756 76.676l-35.703-35.705C391.982 25.9 402.656 0 424.024 0H552c13.255 0 24 10.745 24 24zM407.029 270.794l-16 16A23.999 23.999 0 0 0 384 303.765V448H64V128h264a24.003 24.003 0 0 0 16.97-7.029l16-16C376.089 89.851 365.381 64 344 64H48C21.49 64 0 85.49 0 112v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48V287.764c0-21.382-25.852-32.09-40.971-16.97z"/&gt;&lt;/svg&gt;ve aqui](https://miriamll.github.io/Curso_CIAD/Clase3Parte1#24)
-
-
-```r
-Hora_inicio&lt;-Datos_campo[1,1]
-Hora_final&lt;-Datos_campo[1,2]
-Hora_inicio&lt;-as.POSIXct(strptime(Hora_inicio, "%Y-%m-%d %H:%M:%S"), "GMT") 
-Hora_final&lt;- as.POSIXct(strptime(Hora_final, "%Y-%m-%d %H:%M:%S"), "GMT") 
-```
-- Hora de inicio esta en la primera fila y primera columna por eso [1,1]. 
-- Hora final esta en la primera fila y la segunda columna por eso [1,2]
-- Después ambas se transformaron a formato fecha hora para que R entienda que son hora y día.
-
----
-
-### 3.3. Recortar 
-
-Ahora puedes usar esa información para recortar los tracks.
-
-```r
-GPS01_opcion3&lt;-mutate(GPS01, 
-                      tracks = ifelse(GPS01$diahora &gt;= Hora_inicio &amp; 
-                                        GPS01$diahora &lt;= Hora_final, 
-                                        "Y","N"))
-GPS01_opcion3&lt;-GPS01_opcion3 %&gt;% 
-  filter(tracks=='Y')
-```
-
-Revisa que los datos se encuentren dentro de los rangos esperados.
-
-```r
-range(GPS01_opcion3$diahora)
-```
-
-```
-## [1] "2017-11-02 18:11:57 GMT" "2017-11-05 14:09:06 GMT"
-```
-
-.center[
-&lt;h1&gt;🥳&lt;/h1&gt;
-]
-
-
----
-
-class:center,middle
-
-&lt;h1&gt;&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#22577a;" viewBox="0 0 576 512"&gt;&lt;path d="M542.22 32.05c-54.8 3.11-163.72 14.43-230.96 55.59-4.64 2.84-7.27 7.89-7.27 13.17v363.87c0 11.55 12.63 18.85 23.28 13.49 69.18-34.82 169.23-44.32 218.7-46.92 16.89-.89 30.02-14.43 30.02-30.66V62.75c.01-17.71-15.35-31.74-33.77-30.7zM264.73 87.64C197.5 46.48 88.58 35.17 33.78 32.05 15.36 31.01 0 45.04 0 62.75V400.6c0 16.24 13.13 29.78 30.02 30.66 49.49 2.6 149.59 12.11 218.77 46.95 10.62 5.35 23.21-1.94 23.21-13.46V100.63c0-5.29-2.62-10.14-7.27-12.99z"/&gt;&lt;/svg&gt;
-
-## 4. Funciones
+# 3. Recortar multiples individuos
 Como usar funciones para cortar periodos en nuestros datos de GPS cuando tenemos muchos individuos.
 
 ---
 
 
-### 4.1. Datos de libreta
+### 3.1. Datos de libreta
 
-Es probable que tengamos una libreta con muchas horas de inicio y final, y el identificador del individuo.
-
-Crearemos un ejemplo:
+El paquete sula provee con datos de ejemplo de datos de libreta.  
+Para usar las funciones te recomiendo tener los mismos nombres en las columnas.  
 
 ```r
-IDs&lt;-c("GPS01","GPS02","GPS03","GPS04","GPS05","GPS06","GPS07","GPS08","GPS09","GPS10")
-Hora_inicio&lt;-c('03/11/2017 08:00:00', '03/11/2017 09:00:00','03/11/2017 10:00:00','03/11/2017 11:00:00','03/11/2017 12:00:00','03/11/2017 13:00:00','25/11/2017 14:00:00','25/11/2017 15:00:00','25/11/2017 16:00:00','25/11/2017 17:00:00')
-Hora_final&lt;-c('05/11/2017 14:00:00','05/11/2017 15:00:00','05/11/2017 16:00:00','05/11/2017 17:00:00','05/11/2017 18:00:00','05/11/2017 19:00:00','26/11/2017 20:00:00','26/11/2017 21:00:00','26/11/2017 22:00:00','26/11/2017 23:00:00')
-Datos_campo&lt;-data.frame(IDs=IDs,
-                       Hora_inicio=Hora_inicio,
-                       Hora_final=Hora_final)
-head(Datos_campo)
+library(sula)
+Notas&lt;-Notas
+head(Notas)
 ```
 
 ```
@@ -333,17 +287,43 @@ head(Datos_campo)
 ```
 
 ---
+name: sula2
+### 3.2. Usando paquete sula
 
-### 4.2. Basicos de una funcion
+Puedes recortar periodos en los viajes.  
+Para el ejemplo hay que tener dos data frames:  
+- **Datos de GPS** incluyendo las columnas 'DateGMT','TimeGMT' y 'IDs'.  
+Si no tienen estos nombres favor de renombrarlas.  
+- **Datos de campo** debe incluir las columnas 'IDs', 'Hora_inicio' y 'Hora_final'.  
+Si no tienen esos nombres favor de renombrarlas.  
 
-Una función nos permite ahorrarnos el tiempo de escribir todos los pasos.
-
-**Nota** Recuerda cambiar tus datos a formato fecha y hora.
 
 ```r
-GPS_originales$diahora&lt;-paste(GPS_originales$DateGMT,GPS_originales$TimeGMT)
-GPS_originales$diahora&lt;-as.POSIXct(strptime(GPS_originales$diahora, "%d/%m/%Y %H:%M:%S"),  "GMT")
+GPS_recortados&lt;-recortar_por_ID(GPS_data=GPS_raw,
+                                Notas=Notas,
+                                formato="%d/%m/%Y %H:%M:%S")
 ```
+
+
+```r
+range(GPS_recortados$dia_hora)
+```
+
+```
+## [1] "2017-11-03 08:02:18 GMT" "2017-11-26 22:59:56 GMT"
+```
+
+Listo!
+.center[
+&lt;h1&gt;🥳&lt;/h1&gt;
+]
+
+---
+name: funcion
+### 3.3. Basicos de una función
+
+También se puede hacer lo mismo, pero paso a paso usando una función.  
+Una función nos permite ahorrarnos el tiempo de escribir todos los pasos.
 
 Para crear una función se usa el argumento **function** y corchetes.
 
@@ -352,20 +332,20 @@ Nombre_de_la_funcion&lt;-function(){}
 ```
 .right[...pero no entrare en detalles.&lt;br&gt;
 
-Si quieres aprender mas sobre funciones [&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#264653;" viewBox="0 0 576 512"&gt;&lt;path d="M576 24v127.984c0 21.461-25.96 31.98-40.971 16.971l-35.707-35.709-243.523 243.523c-9.373 9.373-24.568 9.373-33.941 0l-22.627-22.627c-9.373-9.373-9.373-24.569 0-33.941L442.756 76.676l-35.703-35.705C391.982 25.9 402.656 0 424.024 0H552c13.255 0 24 10.745 24 24zM407.029 270.794l-16 16A23.999 23.999 0 0 0 384 303.765V448H64V128h264a24.003 24.003 0 0 0 16.97-7.029l16-16C376.089 89.851 365.381 64 344 64H48C21.49 64 0 85.49 0 112v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48V287.764c0-21.382-25.852-32.09-40.971-16.97z"/&gt;&lt;/svg&gt; ve aqui](https://es.r4ds.hadley.nz/funciones.html)]
+Si quieres aprender más sobre funciones [&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#e63946;" viewBox="0 0 576 512"&gt;&lt;path d="M576 24v127.984c0 21.461-25.96 31.98-40.971 16.971l-35.707-35.709-243.523 243.523c-9.373 9.373-24.568 9.373-33.941 0l-22.627-22.627c-9.373-9.373-9.373-24.569 0-33.941L442.756 76.676l-35.703-35.705C391.982 25.9 402.656 0 424.024 0H552c13.255 0 24 10.745 24 24zM407.029 270.794l-16 16A23.999 23.999 0 0 0 384 303.765V448H64V128h264a24.003 24.003 0 0 0 16.97-7.029l16-16C376.089 89.851 365.381 64 344 64H48C21.49 64 0 85.49 0 112v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48V287.764c0-21.382-25.852-32.09-40.971-16.97z"/&gt;&lt;/svg&gt; ve aqui](https://es.r4ds.hadley.nz/funciones.html)]
 
 ---
 
-### 4.2. Función
+### 3.3. Función
 
 Si no quieres crear tu propia función, usa la siguiente función pero asegúrate de tener:
 1. Un data frame con tus datos de GPS con cinco columnas siendo la 5ta IDs y una columna **diahora** (en POSIXct).
-2. Un data frame con tus datos de campo con el nombre **Datos_campo** que contenga tres columnas (IDs, Hora_inicio y Hora_final).
+2. Un data frame con tus datos de campo con el nombre **Notas** que contenga tres columnas (IDs, Hora_inicio y Hora_final).
 
 ```r
 cortar_viaje&lt;-function(GPS_id=GPS_id){
   Nombre&lt;-as.character(GPS_id[1,5]) #5ta columna es IDs
-  Horas&lt;-subset(Datos_campo,Datos_campo$IDs==Nombre)
+  Horas&lt;-subset(Notas,Notas$IDs==Nombre)
   Hora_inicio&lt;-Horas[1,2] #2nda columna es Hora_inicio
   Hora_final&lt;-Horas[1,3]  #3era columna es Hora_final
   Hora_inicio&lt;- as.POSIXct(strptime(Hora_inicio, "%d/%m/%Y %H:%M:%S"), tz='GMT') 
@@ -375,27 +355,64 @@ cortar_viaje&lt;-function(GPS_id=GPS_id){
   GPS_recortado&lt;-GPS_recortado %&gt;% filter(track=='Y')
   assign(paste0(Nombre,"_recortado"),GPS_recortado,envir=.GlobalEnv)}
 ```
-Cuando cargas tu funcion te aparece el el **environment** en la parte de **Functions**
+Cuando cargas tu función te aparece el el **environment** en la parte de **Functions**
+
+
 ---
 
-### 4.4. cortar_viaje
+### 3.4. cortar_viaje
+
+**Nota** Recuerda cambiar tus datos a formato fecha y hora.
+
+```r
+GPS_raw$diahora&lt;-paste(GPS_raw$DateGMT,GPS_raw$TimeGMT)
+GPS_raw$diahora&lt;-as.POSIXct(strptime(GPS_raw$diahora, "%d/%m/%Y %H:%M:%S"),  "GMT")
+```
+
+Y cargar la libreria
+
+```r
+library(dplyr)
+```
 
 En la dispositiva anterior creamos una funcion que se llama **cortar_viaje**. &lt;br&gt;
-Para que haga algo hay que darle argumentos.
-Por ejemplo, el nombre del objeto GPS01
+Para que haga algo hay que darle argumentos.  
+Por ejemplo, el nombre del objeto GPS01.
 
 ```r
-GPS01&lt;-subset(GPS_originales,GPS_originales$IDs=='GPS01')
-cortar_viaje(GPS01)
+cortar_viaje(GPS_01)
 ```
-Al final la funcion agrega un nuevo objeto a tu environment con el nombre del GPS y "_recortado". En este caso creara **GPS01_recortado**
+Al final la función agrega un nuevo objeto a tu environment con el nombre del GPS y "_recortado". En este caso creara **GPS01_recortado**
 
-Tambien se puede usar:
+---
+
+### 3.4. cortar_viaje
+
+Listo!
 
 ```r
-cortar_viaje(subset(GPS_originales,GPS_originales$IDs=='GPS02'))
+range(GPS01_recortado$diahora)
+```
+
+```
+## [1] "2017-11-03 08:02:18 GMT" "2017-11-05 13:56:13 GMT"
+```
+
+También se puede usar:
+
+```r
+cortar_viaje(subset(GPS_raw,GPS_raw$IDs=='GPS02'))
 ```
 Las dos opciones funcionan.
+
+
+```r
+range(GPS02_recortado$diahora)
+```
+
+```
+## [1] "2017-11-03 09:02:57 GMT" "2017-11-05 14:57:40 GMT"
+```
 
 .center[
 &lt;h1&gt;🥳&lt;/h1&gt;
@@ -403,85 +420,80 @@ Las dos opciones funcionan.
 
 ---
 
+name: iteraciones
+
 class:center,middle
 
 &lt;h1&gt;&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#22577a;" viewBox="0 0 576 512"&gt;&lt;path d="M542.22 32.05c-54.8 3.11-163.72 14.43-230.96 55.59-4.64 2.84-7.27 7.89-7.27 13.17v363.87c0 11.55 12.63 18.85 23.28 13.49 69.18-34.82 169.23-44.32 218.7-46.92 16.89-.89 30.02-14.43 30.02-30.66V62.75c.01-17.71-15.35-31.74-33.77-30.7zM264.73 87.64C197.5 46.48 88.58 35.17 33.78 32.05 15.36 31.01 0 45.04 0 62.75V400.6c0 16.24 13.13 29.78 30.02 30.66 49.49 2.6 149.59 12.11 218.77 46.95 10.62 5.35 23.21-1.94 23.21-13.46V100.63c0-5.29-2.62-10.14-7.27-12.99z"/&gt;&lt;/svg&gt;
 
-## 5. Iteraciones
+# 4. Iteraciones
 Como usar iteraciones cortar periodos en nuestros datos de GPS cuando tenemos muchos individuos en una lista.
-
+Si quieres aprender más sobre iteraciones [&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#e63946;" viewBox="0 0 576 512"&gt;&lt;path d="M576 24v127.984c0 21.461-25.96 31.98-40.971 16.971l-35.707-35.709-243.523 243.523c-9.373 9.373-24.568 9.373-33.941 0l-22.627-22.627c-9.373-9.373-9.373-24.569 0-33.941L442.756 76.676l-35.703-35.705C391.982 25.9 402.656 0 424.024 0H552c13.255 0 24 10.745 24 24zM407.029 270.794l-16 16A23.999 23.999 0 0 0 384 303.765V448H64V128h264a24.003 24.003 0 0 0 16.97-7.029l16-16C376.089 89.851 365.381 64 344 64H48C21.49 64 0 85.49 0 112v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48V287.764c0-21.382-25.852-32.09-40.971-16.97z"/&gt;&lt;/svg&gt; ve aquí](https://r4ds.had.co.nz/iteration.html)
 
 ---
 
-### 5.1. Listas
+## 4.1. Listas
 
-Para crear una lista podemos usar la siguiente funcion.
+Para hacer una iteración con los datos, lo primero es recordar que los datos deben estar en formato día y hora
 
 ```r
-Lista_GPS&lt;-split(GPS_originales,GPS_originales$IDs)
+GPS_raw$diahora&lt;-paste(GPS_raw$DateGMT,
+                              GPS_raw$TimeGMT)
+
+GPS_raw$diahora&lt;-as.POSIXct(strptime(GPS_raw$diahora,
+                                            "%d/%m/%Y %H:%M:%S"),"GMT")
 ```
-Ahora aparecera en tu **environment** Lista_GPS, y este objeto es una **Large list**. 
+
+Posteriormente, hay que crear una lista usando como referencia el ID.
+
+```r
+Lista_GPS&lt;-split(GPS_raw,GPS_raw$IDs)
+```
+Ahora aparecerá en tu **environment** Lista_GPS, y este objeto es una **Large list**. 
 
 Podemos acceder a elementos individuales de esta lista.
 Por ejemplo:
 
 ```r
-GPS01_opcion4&lt;-Lista_GPS[[1]]
+GPS_01&lt;-Lista_GPS[[1]]
 ```
-
-Y con esta serie de pasos podemos recortar el periodo que nos interesa. &lt;br&gt; 
-
-```r
-Nombre&lt;-as.character(GPS01_opcion4[1,5])
-Horas&lt;-subset(Datos_campo,Datos_campo$IDs==Nombre)
-Hora_inicio&lt;-Horas[1,2]
-Hora_final&lt;-Horas[1,3]
-Hora_inicio&lt;- as.POSIXct(strptime(Hora_inicio, "%d/%m/%Y %H:%M:%S"), tz='GMT') 
-Hora_final&lt;- as.POSIXct(strptime(Hora_final, "%d/%m/%Y %H:%M:%S"), tz='GMT') 
-Lista_GPS[[1]]&lt;-mutate(GPS01_opcion4,track=ifelse(GPS01_opcion4$diahora&gt;=Hora_inicio &amp; GPS01_opcion4$diahora&lt;=Hora_final,"Y","N"))
-```
-**Son los mismos pasos que vimos anteriormente.**
 
 ---
 
-### 5.2. Aplicar
+## 4.2. Aplicar
 
 Pero para no hacer individuo por individuo, podemos hacer una **iteracion** que se aplique a todos los elementos de la lista
 
-.right[...pero no entrare en detalles.&lt;br&gt;
-
-Si quieres aprender mas sobre iteraciones [&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#264653;" viewBox="0 0 576 512"&gt;&lt;path d="M576 24v127.984c0 21.461-25.96 31.98-40.971 16.971l-35.707-35.709-243.523 243.523c-9.373 9.373-24.568 9.373-33.941 0l-22.627-22.627c-9.373-9.373-9.373-24.569 0-33.941L442.756 76.676l-35.703-35.705C391.982 25.9 402.656 0 424.024 0H552c13.255 0 24 10.745 24 24zM407.029 270.794l-16 16A23.999 23.999 0 0 0 384 303.765V448H64V128h264a24.003 24.003 0 0 0 16.97-7.029l16-16C376.089 89.851 365.381 64 344 64H48C21.49 64 0 85.49 0 112v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48V287.764c0-21.382-25.852-32.09-40.971-16.97z"/&gt;&lt;/svg&gt; ve aqui](https://es.r4ds.hadley.nz/iteraci%C3%B3n.html)]
-
-Si quieres usar esta **iteracion**, solo asegurate de 
+Si quieres usar esta **iteración**, solo asegurate de 
 - Tener una lista con los datos de tus GPS que contenga una columna IDs y **diahora** en formato POSIXct
-- Tener una objeto llamado **Datos_campo** con IDs, Hora_inicio y Hora_final
+- Tener una objeto llamado **Notas** con IDs, Hora_inicio y Hora_final
 
 ```r
 for( i in seq_along(Lista_GPS)){
   GPS_id&lt;-Lista_GPS[[i]]
   Nombre&lt;-as.character(GPS_id[1,5]) #columa IDs
-  Horas&lt;-subset(Datos_campo,Datos_campo$IDs==Nombre) #Datos_campo
+  Horas&lt;-subset(Notas,Notas$IDs==Nombre) #Notas
   Hora_inicio&lt;- as.POSIXct(strptime(Horas[1,2], "%d/%m/%Y %H:%M:%S"), tz='GMT') 
   Hora_final&lt;- as.POSIXct(strptime(Horas[1,3], "%d/%m/%Y %H:%M:%S"), tz='GMT') 
-  Lista_GPS[[i]]&lt;-mutate(GPS_id,track= ifelse(GPS_id$diahora&gt;=Hora_inicio &amp; #diahora
+  Lista_GPS[[i]]&lt;-dplyr::mutate(GPS_id,track= ifelse(GPS_id$diahora&gt;=Hora_inicio &amp; #diahora
                                     GPS_id$diahora&lt;=Hora_final,"Y","N")) 
   }
 ```
 
 ---
 
-### 5.3. Data frame
+## 4.3. Data frame
 
 Puedes volver a pegar los elementos de tu lista en un data frame.
 
 ```r
-GPS_nuevo&lt;- do.call("rbind",Lista_GPS)
+GPS_df&lt;- do.call("rbind",Lista_GPS)
 ```
 
 Y quedarte solo con los periodos que te interesan.
 
 ```r
-GPS_recortados&lt;-GPS_nuevo %&gt;% filter(track=='Y')
+GPS_recortados&lt;-GPS_df %&gt;% filter(track=='Y')
 ```
 
 Listo!
@@ -490,54 +502,57 @@ Listo!
 ]
 
 ---
+name: exportar
 
-## 5.4. Comparar
+class: center, middle
 
-Si quieres comparar los cambios y ver si todo funciono.
+&lt;h1&gt;&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#22577a;" viewBox="0 0 576 512"&gt;&lt;path d="M384 121.9c0-6.3-2.5-12.4-7-16.9L279.1 7c-4.5-4.5-10.6-7-17-7H256v128h128zM571 308l-95.7-96.4c-10.1-10.1-27.4-3-27.4 11.3V288h-64v64h64v65.2c0 14.3 17.3 21.4 27.4 11.3L571 332c6.6-6.6 6.6-17.4 0-24zm-379 28v-32c0-8.8 7.2-16 16-16h176V160H248c-13.2 0-24-10.8-24-24V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V352H208c-8.8 0-16-7.2-16-16z"/&gt;&lt;/svg&gt;
 
-Estos eran los datos originales, el numero debajo de ID corresponde al numero de observaciones.
+# 5. Exportar 
+Para esta parte necesitas saber exportar tus datos, si necesitas recordar como hacerlo, te recomiendo [&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#e63946;" viewBox="0 0 576 512"&gt;&lt;path d="M576 24v127.984c0 21.461-25.96 31.98-40.971 16.971l-35.707-35.709-243.523 243.523c-9.373 9.373-24.568 9.373-33.941 0l-22.627-22.627c-9.373-9.373-9.373-24.569 0-33.941L442.756 76.676l-35.703-35.705C391.982 25.9 402.656 0 424.024 0H552c13.255 0 24 10.745 24 24zM407.029 270.794l-16 16A23.999 23.999 0 0 0 384 303.765V448H64V128h264a24.003 24.003 0 0 0 16.97-7.029l16-16C376.089 89.851 365.381 64 344 64H48C21.49 64 0 85.49 0 112v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48V287.764c0-21.382-25.852-32.09-40.971-16.97z"/&gt;&lt;/svg&gt;empezar por aquí](https://miriamll.github.io/Curso_CIAD/Clase3Parte2#54).
+
+---
+
+### 5.1. Comparar
+
+Si quieres comparar los cambios y ver si todo funcionó. Usa table para ver el numero de observaciones.Si tenemos menos observaciones que en el archivo original. Eso significa que logramos cortar periodos en los tracks de manera **exitosa**.
+
+Datos originales
 
 ```r
-table(GPS_originales$IDs)
+table(GPS_raw$IDs)
 ```
 
 ```
-## 
-## GPS01 GPS02 GPS03 GPS04 GPS05 GPS06 GPS07 GPS08 GPS09 GPS10 
-##  1038  1049  1246  1031   962  1231  1004  1015   931   933
+
+GPS01 GPS02 GPS03 GPS04 GPS05 GPS06 GPS07 GPS08 GPS09 GPS10 
+ 1038  1049  1246  1031   962  1231  1004  1015   931   933 
 ```
 
-Estos son los datos recortados
+Datos recortados
 
 ```r
 table(GPS_recortados$IDs)
 ```
 
 ```
-## 
-## GPS01 GPS02 GPS03 GPS04 GPS05 GPS06 GPS07 GPS08 GPS09 GPS10 
-##   783   787   784   775   698   771   436   436   436   437
+
+GPS01 GPS02 GPS03 GPS04 GPS05 GPS06 GPS07 GPS08 GPS09 GPS10 
+  783   787   784   775   698   771   436   436   436   437 
 ```
 
-Como vez, tenemos menos datos que en el archivo original. Eso significa que logramos cortar periodos en los tracks de manera **exitosa**
+.center[
+&lt;h1&gt;🥳&lt;/h1&gt;
+]
 
 ---
 
-class: center, middle
-
-&lt;h1&gt;&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#22577a;" viewBox="0 0 576 512"&gt;&lt;path d="M384 121.9c0-6.3-2.5-12.4-7-16.9L279.1 7c-4.5-4.5-10.6-7-17-7H256v128h128zM571 308l-95.7-96.4c-10.1-10.1-27.4-3-27.4 11.3V288h-64v64h64v65.2c0 14.3 17.3 21.4 27.4 11.3L571 332c6.6-6.6 6.6-17.4 0-24zm-379 28v-32c0-8.8 7.2-16 16-16h176V160H248c-13.2 0-24-10.8-24-24V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V352H208c-8.8 0-16-7.2-16-16z"/&gt;&lt;/svg&gt;
-
-# 6. Exportar 
-Para esta parte necesitas saber exportar tus datos, si necesitas recordar como hacerlo, te recomiendo [&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#22577a;" viewBox="0 0 576 512"&gt;&lt;path d="M576 24v127.984c0 21.461-25.96 31.98-40.971 16.971l-35.707-35.709-243.523 243.523c-9.373 9.373-24.568 9.373-33.941 0l-22.627-22.627c-9.373-9.373-9.373-24.569 0-33.941L442.756 76.676l-35.703-35.705C391.982 25.9 402.656 0 424.024 0H552c13.255 0 24 10.745 24 24zM407.029 270.794l-16 16A23.999 23.999 0 0 0 384 303.765V448H64V128h264a24.003 24.003 0 0 0 16.97-7.029l16-16C376.089 89.851 365.381 64 344 64H48C21.49 64 0 85.49 0 112v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48V287.764c0-21.382-25.852-32.09-40.971-16.97z"/&gt;&lt;/svg&gt;empezar por aquí](https://miriamll.github.io/Curso_CIAD/Clase3Parte2#54).
-
----
-
-### 6.1. Exportar 
+### 5.2. Exportar 
 
 De acuerdo a lo que quieras hacer, puedes exportar los GPS de manera individual
 
 ```r
-GPS01
+GPS_01
 ```
 
 O puedes exportar todos los GPS recortados
@@ -564,28 +579,30 @@ write_csv(
 
 ---
 
-## 7. Contacto
+## 6. Contacto
 
-Para dudas, comentarios y sugerencias:  
-- Escríbeme a miriamjlerma@gmail.com
+Recapitulando: 
+- [Cargar datos de GPS](#cargar) &lt;br&gt;
+- Recortar periodos de [un solo individuo](#uno)&lt;br&gt;
+[Usando paquete sula](#sula)&lt;br&gt;
+[Convertir a formato dia y hora](#convertir)&lt;br&gt;
+- Recortar periodos de [múltiples individuos](#varios)&lt;br&gt;
+[Usando paquete sula](#sula2)&lt;br&gt;
+[Usando función](#funcion)&lt;br&gt;
+[Usando iteración](#funcion)&lt;br&gt;
+- [Exportar datos](#exportar) &lt;br&gt;
 
-Este material esta accesible y se encuentra en 
-- mi [&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#264653;" viewBox="0 0 576 512"&gt;&lt;path d="M576 24v127.984c0 21.461-25.96 31.98-40.971 16.971l-35.707-35.709-243.523 243.523c-9.373 9.373-24.568 9.373-33.941 0l-22.627-22.627c-9.373-9.373-9.373-24.569 0-33.941L442.756 76.676l-35.703-35.705C391.982 25.9 402.656 0 424.024 0H552c13.255 0 24 10.745 24 24zM407.029 270.794l-16 16A23.999 23.999 0 0 0 384 303.765V448H64V128h264a24.003 24.003 0 0 0 16.97-7.029l16-16C376.089 89.851 365.381 64 344 64H48C21.49 64 0 85.49 0 112v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48V287.764c0-21.382-25.852-32.09-40.971-16.97z"/&gt;&lt;/svg&gt;github](https://github.com/MiriamLL/Curso_tracking/).
-
-&lt;br&gt;
+.right[Para dudas, comentarios y sugerencias:  
+Escríbeme a miriamjlerma@gmail.com]
 
 Si quieres dar créditos puedes usar:
-- Lerma M (2021) Package sula. Proximamente con zenodo.
-- Lerma M, Dehnhard N, Luna-Jorquera G, Voigt CC, Garthe S (2020) Breeding stage, not sex, affects foraging characteristics in masked boobies at Rapa Nui. Behavioral ecology and sociobiology 74: 149 [&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#264653;" viewBox="0 0 576 512"&gt;&lt;path d="M576 24v127.984c0 21.461-25.96 31.98-40.971 16.971l-35.707-35.709-243.523 243.523c-9.373 9.373-24.568 9.373-33.941 0l-22.627-22.627c-9.373-9.373-9.373-24.569 0-33.941L442.756 76.676l-35.703-35.705C391.982 25.9 402.656 0 424.024 0H552c13.255 0 24 10.745 24 24zM407.029 270.794l-16 16A23.999 23.999 0 0 0 384 303.765V448H64V128h264a24.003 24.003 0 0 0 16.97-7.029l16-16C376.089 89.851 365.381 64 344 64H48C21.49 64 0 85.49 0 112v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48V287.764c0-21.382-25.852-32.09-40.971-16.97z"/&gt;&lt;/svg&gt;OpenAccess](https://link.springer.com/article/10.1007/s00265-020-02921-1)&lt;br&gt;
+- Lerma M (2021) Package sula. Zenodo. http://doi.org/10.5281/zenodo.4682898
+- Lerma M, Dehnhard N, Luna-Jorquera G, Voigt CC, Garthe S (2020) Breeding stage, not sex, affects foraging characteristics in masked boobies at Rapa Nui. Behavioral ecology and sociobiology 74: 149 [&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#e63946;" viewBox="0 0 576 512"&gt;&lt;path d="M576 24v127.984c0 21.461-25.96 31.98-40.971 16.971l-35.707-35.709-243.523 243.523c-9.373 9.373-24.568 9.373-33.941 0l-22.627-22.627c-9.373-9.373-9.373-24.569 0-33.941L442.756 76.676l-35.703-35.705C391.982 25.9 402.656 0 424.024 0H552c13.255 0 24 10.745 24 24zM407.029 270.794l-16 16A23.999 23.999 0 0 0 384 303.765V448H64V128h264a24.003 24.003 0 0 0 16.97-7.029l16-16C376.089 89.851 365.381 64 344 64H48C21.49 64 0 85.49 0 112v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48V287.764c0-21.382-25.852-32.09-40.971-16.97z"/&gt;&lt;/svg&gt;OpenAccess](https://link.springer.com/article/10.1007/s00265-020-02921-1)&lt;br&gt;
 Los datos de prueba vienen de esa publicación. 
-
-&lt;br&gt;
-&lt;br&gt;
-
 
 .center[
 
-&lt;h3&gt;&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#264653;" viewBox="0 0 576 512"&gt;&lt;path d="M280.37 148.26L96 300.11V464a16 16 0 0 0 16 16l112.06-.29a16 16 0 0 0 15.92-16V368a16 16 0 0 1 16-16h64a16 16 0 0 1 16 16v95.64a16 16 0 0 0 16 16.05L464 480a16 16 0 0 0 16-16V300L295.67 148.26a12.19 12.19 0 0 0-15.3 0zM571.6 251.47L488 182.56V44.05a12 12 0 0 0-12-12h-56a12 12 0 0 0-12 12v72.61L318.47 43a48 48 0 0 0-61 0L4.34 251.47a12 12 0 0 0-1.6 16.9l25.5 31A12 12 0 0 0 45.15 301l235.22-193.74a12.19 12.19 0 0 1 15.3 0L530.9 301a12 12 0 0 0 16.9-1.6l25.5-31a12 12 0 0 0-1.7-16.93z"/&gt;&lt;/svg&gt;[Volver ](https://miriamlerma.netlify.app/posts/2021-03-16-biologging/)
+&lt;h3&gt;&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#e63946;" viewBox="0 0 576 512"&gt;&lt;path d="M280.37 148.26L96 300.11V464a16 16 0 0 0 16 16l112.06-.29a16 16 0 0 0 15.92-16V368a16 16 0 0 1 16-16h64a16 16 0 0 1 16 16v95.64a16 16 0 0 0 16 16.05L464 480a16 16 0 0 0 16-16V300L295.67 148.26a12.19 12.19 0 0 0-15.3 0zM571.6 251.47L488 182.56V44.05a12 12 0 0 0-12-12h-56a12 12 0 0 0-12 12v72.61L318.47 43a48 48 0 0 0-61 0L4.34 251.47a12 12 0 0 0-1.6 16.9l25.5 31A12 12 0 0 0 45.15 301l235.22-193.74a12.19 12.19 0 0 1 15.3 0L530.9 301a12 12 0 0 0 16.9-1.6l25.5-31a12 12 0 0 0-1.7-16.93z"/&gt;&lt;/svg&gt;[Volver ](https://miriamlerma.netlify.app/posts/2021-03-16-biologging/)
 ]
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>

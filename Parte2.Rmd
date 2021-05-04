@@ -39,9 +39,14 @@ class: title-slide, inverse, middle, right
 
 # Intro
 
-En esta presentación verán como:
-- Cargar datos de GPS <br>
-- Corregir la hora de acuerdo al GMT
+En esta presentación verán como: <br> 
+- [Cargar datos de GPS](#cargar) <br>
+- Corregir la hora de acuerdo al GMT<br>
+[Usando paquete sula](#sula)<br>
+[Usando mutate](#mutate)<br>
+[Usando dmy_hms](#dmy)<br>
+[Cambiando tz](#tz)  <br>
+- [Exportar datos](#exportar) <br>
 
 ```{r, echo=FALSE,include=FALSE, message=FALSE}
 library(emo)
@@ -54,18 +59,18 @@ library(ggplot2)
 ## Ustedes
 
 - Tienes una base de datos con datos de GPS <br>
-- Tienen conocimientos básicos de R, si no te recomiendo [`r fa("external-link-alt", fill = "#22577a")`empezar por aquí](https://miriamlerma.netlify.app/posts/2021-03-01-introar/) <br>
+- Tienen conocimientos básicos de R, si no te recomiendo [`r fa("external-link-alt", fill = "#e63946")`empezar por aquí](https://miriamlerma.netlify.app/posts/2021-03-01-introar/) <br>
 - Necesitan corregir la hora de sus GPSs
   
 ---
-
+name: cargar
 class:center,middle
 
 <h3>`r fa("download", fill = "#22577a")`
 
 ## 1. Importar datos a R
 
-Para esta parte necesitas saber cargar tus datos, si necesitas recordar como hacerlo, te recomiendo [`r fa("external-link-alt", fill = "#22577a")`empezar por aquí](https://miriamll.github.io/Curso_tracking/Parte1).
+Para esta parte necesitas saber cargar tus datos, si necesitas recordar como hacerlo, te recomiendo [`r fa("external-link-alt", fill = "#e63946")`empezar por aquí](https://miriamll.github.io/Curso_tracking/Parte1).
 
 ---
 
@@ -80,8 +85,8 @@ remotes::install_github("MiriamLL/sula")
 Cargar datos
 ```{r, message=FALSE, warning=FALSE}
 library(sula)
-Todos_GPS<-GPSdata
-head(Todos_GPS)
+GPS_Todos<-GPS_raw
+head(GPS_Todos)
 ```
 
 ---
@@ -90,7 +95,7 @@ class:center,middle
 
 <h1>`r fa("search", fill = "#22577a")`
 ## 2. Revisar el día y la hora
-Para esta parte puedes necesitar algunos básicos de como manipular data frames en R, si necesitas más información [`r fa("external-link-alt", fill = "#22577a")`ve aquí](https://miriamll.github.io/Curso_CIAD/Clase3Parte2#1).
+Para esta parte puedes necesitar algunos básicos de como manipular data frames en R, si necesitas más información [`r fa("external-link-alt", fill = "#e63946")`ve aquí](https://miriamll.github.io/Curso_CIAD/Clase3Parte2#1).
 
 ---
 
@@ -114,12 +119,12 @@ Primero unimos las columnas de día y hora en los datos de GPS y convertimos al 
 
 Para unirlos en una columna:
 ```{r}
-Todos_GPS$diahora<-paste(Todos_GPS$DateGMT,Todos_GPS$TimeGMT)
+GPS_Todos$diahora<-paste(GPS_Todos$DateGMT,GPS_Todos$TimeGMT)
 ```
 
 Para decirle que son día y hora:
 ```{r}
-Todos_GPS$diahora<-as.POSIXct(strptime(Todos_GPS$diahora, 
+GPS_Todos$diahora<-as.POSIXct(strptime(GPS_Todos$diahora, 
                                        "%d/%m/%Y %H:%M:%S"),"GMT")
 ```
 
@@ -160,19 +165,19 @@ Para el formato '2017/12/21 05:30:01'.
 
 Verifica que tus datos no tengan NAs ni ceros en día y hora.
 ```{r}
-range(Todos_GPS$diahora)
+range(GPS_Todos$diahora)
 ```
 
 Si tienes **NAs**, deberas sacarlos, puedes usar la libreria tidyverse.
 ```{r, message=FALSE, warning=FALSE}
 library(tidyverse)
-Todos_GPS_Limpio<-Todos_GPS%>%
+GPS_Todos_Limpio<-GPS_Todos%>%
   drop_na(diahora)
 ```
 
 Si tienes ceros, puedes usar **filter** y **!=** que significa **diferente de**.
 ```{r}
-Todos_GPS_Limpio<-Todos_GPS%>%
+GPS_Todos_Limpio<-GPS_Todos%>%
   filter(diahora != 0)
 ```
 
@@ -182,11 +187,56 @@ class: center, middle
 
 <h1>`r fa("clock", fill = "#22577a")`
 ## 3. Corregir la hora
-Para esta parte puedes necesitar algunos básicos de como manipular data frames en R, si necesitas más información [`r fa("external-link-alt", fill = "#22577a")`ve aquí](https://miriamll.github.io/Curso_CIAD/Clase3Parte2#1).
+Para esta parte puedes necesitar algunos básicos de como manipular data frames en R, si necesitas más información [`r fa("external-link-alt", fill = "#e63946")`ve aquí](https://miriamll.github.io/Curso_CIAD/Clase3Parte2#1).
+
+---
+name: sula
+### 3.1. Usando sula
+
+Cargar la libreria.
+```{r, message=FALSE}
+library(sula)
+```
+
+Renombra el objeto.
+```{r}
+Opcion1<-GPS_raw
+```
+
+Esta función corrige el tiempo de acuerdo a la zona horaria, necesitas incluir tus datos, definir la columna de hora y día, el formato en el que están y el numero de horas de diferencia. 
+```{r}
+GPS_gmt<-ajustar_hora(GPS_data = Opcion1,
+                      dif_hor = 5,
+                      dia_col = 'DateGMT',
+                      hora_col = 'TimeGMT',
+                      formato="%d/%m/%Y %H:%M:%S")
+```
+Nota que hora se resta a la columna diahora y las cinco horas se multiplican por los minutos y segundos.
+
 
 ---
 
-### 3.1. Usando mutate
+### 3.2. Usando sula
+
+Listo!
+
+Hora original:
+```{r}
+head(GPS_raw$TimeGMT,5)
+```
+
+Verificar hora corregida:
+```{r}
+range(GPS_gmt$hora_corregida)
+```
+
+.center[
+<h1>🥳</h1>
+]
+
+---
+name: mutate
+### 3.4. Usando mutate
 
 Cargar la libreria.
 ```{r, message=FALSE}
@@ -195,21 +245,21 @@ library(tidyverse)
 
 Renombra el objeto.
 ```{r}
-Opcion1<-Todos_GPS
+Opcion2<-GPS_Todos
 ```
 
 Supongamos que para nuestros datos tenemos 5 horas de diferencia.  
 
 Para restar las 5 horas, creamos una columna que se llama hora_corregida, no es necesario pero sirve para verificar que todo este correcto.
 ```{r}
-Opcion1<-Opcion1 %>%
+Opcion2<-Opcion2 %>%
   mutate(hora_corregida = diahora - 5*60*60)
 ```
 Nota que hora se resta a la columna diahora y las cinco horas se multiplican por los minutos y segundos.
 
 ---
 
-### 3.1. Usando mutate
+### 3.2. Usando mutate
 
 Listo!
 ```{r}
@@ -226,8 +276,8 @@ range(Opcion1$hora_corregida)
 ]
 
 ---
-
-### 3.2. Usando dmy_hms
+name: dmy
+### 3.3. Usando dmy_hms
 
 Cargar libreria.
 ```{r, message=FALSE}
@@ -236,71 +286,24 @@ library(lubridate)
 
 Renombra tu objeto.
 ```{r}
-Opcion2<-Todos_GPS
+Opcion3<-GPS_Todos
 ```
 
 Convertir usando dmy_hms
 ```{r}
-Opcion2$diahora<-paste(Opcion2$DateGMT,Opcion2$TimeGMT)
-Opcion2$diahora<-dmy_hms(Opcion2$diahora)
+Opcion3$diahora<-paste(Opcion3$DateGMT,Opcion3$TimeGMT)
+Opcion3$diahora<-dmy_hms(Opcion3$diahora)
 ```
 
 Restar los segundos de diferencia
 ```{r}
-Opcion2$hora_corregida <- Opcion2$diahora - 3600*5
+Opcion3$hora_corregida <- Opcion3$diahora - 3600*5
 ```
 Nota que hora se resta a la columna diahora y las cinco horas se multiplican por los minutos y segundos.
 
 ---
 
-### 3.2. Usando dmy_hms
-
-Listo!
-```{r}
-head(Opcion2$hora_corregida,5)
-```
-
-Verificar
-```{r}
-range(Opcion2$hora_corregida)
-```
-
-.center[
-<h1>🥳</h1>
-]
-
----
-
-### 3.3. Usando lubridate
-
-Renombra tu objeto
-```{r}
-Opcion3<-Todos_GPS
-```
-
-Cargar paquete
-```{r, message=FALSE}
-library(lubridate)
-```
-
-El formato original es probablemente tz Europe/Amsterdam
-```{r}
-Opcion3$Hora<-ymd_hms(Opcion3$diahora, tz = "Europe/Amsterdam")
-```
-
-```{r}
-head(Opcion3$Hora)
-```
-
----
-
-### 3.4. Usando lubridate
-
-Para cambiarlo usar **with_tz**.
-```{r}
-Opcion3$hora_corregida <- with_tz(Opcion3$Hora,tzone = "America/La_Paz")
-```
-
+### 3.3. Usando dmy_hms
 
 Listo!
 ```{r}
@@ -310,6 +313,53 @@ head(Opcion3$hora_corregida,5)
 Verificar
 ```{r}
 range(Opcion3$hora_corregida)
+```
+
+.center[
+<h1>🥳</h1>
+]
+
+---
+name: tz
+### 3.4. Cambiando tz
+
+Renombra tu objeto
+```{r}
+Opcion4<-GPS_Todos
+```
+
+Cargar paquete
+```{r, message=FALSE}
+library(lubridate)
+```
+
+El formato original es probablemente tz Europe/Amsterdam
+```{r}
+Opcion4$Hora<-ymd_hms(Opcion3$diahora, tz = "Europe/Amsterdam")
+```
+
+```{r}
+head(Opcion4$Hora)
+```
+
+---
+
+### 3.4. Cambiando tz
+
+Para cambiarlo usar **with_tz**.
+```{r}
+Opcion4$hora_corregida <- with_tz(Opcion4$Hora,tzone = "America/La_Paz")
+```
+
+
+Listo!
+```{r}
+head(Opcion4$hora_corregida,5)
+```
+
+Verificar
+```{r}
+range(Opcion4$hora_corregida)
 ```
 
 .center[
@@ -331,7 +381,7 @@ Te van a aparecer muchos resultados.
 Otra opción es ver la [`r fa("external-link-alt", fill = "#22577a")`lista en Wikipedia](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).
 
 ---
-
+name: exportar
 class: center, middle
 
 <h1>`r fa("file-export", fill = "#22577a")`
@@ -354,13 +404,14 @@ Seleccionar archivo
 GPS_Todos<-Opcion1
 GPS_Todos<-Opcion2
 GPS_Todos<-Opcion3
+GPS_Todos<-Opcion4
 ```
 
 Exportar el nuevo data frame. 
 ```{r, eval=FALSE}
 write_csv(
-  Todos_GPS,
-  file=paste0(DatosFolder,'/Todos_GPS.csv'))
+  GPS_Todos,
+  file=paste0(DatosFolder,'/GPS_Todos.csv'))
 ```
 
 
@@ -368,26 +419,27 @@ write_csv(
 
 ## 5. Contacto
 
-Para dudas, comentarios y sugerencias:  
-- Escríbeme a miriamjlerma@gmail.com
+Recapitulando:
+- [Cargar datos de GPS](#cargar) <br>
+- Corregir la hora de acuerdo al GMT<br>
+[Usando paquete sula](#sula)<br>
+[Usando mutate](#mutate)<br>
+[Usando dmy_hms](#dmy)<br>
+[Cambiando tz](#tz)  <br>
+- [Exportar datos](#exportar) <br>
 
-Este material esta accesible y se encuentra en 
-- mi [`r fa("external-link-alt", fill = "#22577a")`github](https://github.com/MiriamLL/Curso_tracking/).
-
-<br>
+.right[Para dudas, comentarios y sugerencias:  
+ Escríbeme a miriamjlerma@gmail.com]
 
 Si quieres dar créditos puedes usar:
-- Lerma M (2021) Package sula. Proximamente con zenodo.
-- Lerma M, Dehnhard N, Luna-Jorquera G, Voigt CC, Garthe S (2020) Breeding stage, not sex, affects foraging characteristics in masked boobies at Rapa Nui. Behavioral ecology and sociobiology 74: 149 [`r fa("external-link-alt", fill = "#22577a")`OpenAccess](https://link.springer.com/article/10.1007/s00265-020-02921-1)<br>
+- Lerma M (2021) Package sula. Zenodo. http://doi.org/10.5281/zenodo.4682898
+- Lerma M, Dehnhard N, Luna-Jorquera G, Voigt CC, Garthe S (2020) Breeding stage, not sex, affects foraging characteristics in masked boobies at Rapa Nui. Behavioral ecology and sociobiology 74: 149 [`r fa("external-link-alt", fill = "#e63946")`OpenAccess](https://link.springer.com/article/10.1007/s00265-020-02921-1)<br>
 Los datos de prueba vienen de esa publicación. 
-
-<br>
-<br>
 
 
 .center[
 ```{r, echo=FALSE}
 library(fontawesome)
 ```
-<h3>`r fa("home", fill = "#22577a")`[Volver ](https://miriamlerma.netlify.app/posts/2021-03-16-biologging/)
+<h3>`r fa("home", fill = "#e63946")`[Volver ](https://miriamlerma.netlify.app/posts/2021-03-16-biologging/)
 ]
