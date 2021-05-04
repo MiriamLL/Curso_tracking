@@ -80,8 +80,8 @@ Cargar datos
 
 ```r
 library(sula)
-GPS_Todos&lt;-GPS_raw
-head(GPS_Todos)
+GPS_raw&lt;-GPS_raw
+head(GPS_raw)
 ```
 
 ```
@@ -125,13 +125,13 @@ Primero unimos las columnas de día y hora en los datos de GPS y convertimos al 
 Para unirlos en una columna:
 
 ```r
-GPS_Todos$diahora&lt;-paste(GPS_Todos$DateGMT,GPS_Todos$TimeGMT)
+GPS_raw$diahora&lt;-paste(GPS_raw$DateGMT,GPS_raw$TimeGMT)
 ```
 
 Para decirle que son día y hora:
 
 ```r
-GPS_Todos$diahora&lt;-as.POSIXct(strptime(GPS_Todos$diahora, 
+GPS_raw$diahora&lt;-as.POSIXct(strptime(GPS_raw$diahora, 
                                        "%d/%m/%Y %H:%M:%S"),"GMT")
 ```
 
@@ -175,7 +175,7 @@ Para el formato '2017/12/21 05:30:01'.
 Verifica que tus datos no tengan NAs ni ceros en día y hora.
 
 ```r
-range(GPS_Todos$diahora)
+range(GPS_raw$diahora)
 ```
 
 ```
@@ -186,14 +186,14 @@ Si tienes **NAs**, deberas sacarlos, puedes usar la libreria tidyverse.
 
 ```r
 library(tidyverse)
-GPS_Todos_Limpio&lt;-GPS_Todos%&gt;%
+GPS_Limpio&lt;-GPS_raw%&gt;%
   drop_na(diahora)
 ```
 
 Si tienes ceros, puedes usar **filter** y **!=** que significa **diferente de**.
 
 ```r
-GPS_Todos_Limpio&lt;-GPS_Todos%&gt;%
+GPS_Limpio&lt;-GPS_raw%&gt;%
   filter(diahora != 0)
 ```
 
@@ -230,7 +230,6 @@ GPS_gmt&lt;-ajustar_hora(GPS_data = Opcion1,
                       hora_col = 'TimeGMT',
                       formato="%d/%m/%Y %H:%M:%S")
 ```
-Nota que hora se resta a la columna diahora y las cinco horas se multiplican por los minutos y segundos.
 
 
 ---
@@ -273,10 +272,16 @@ Cargar la libreria.
 library(tidyverse)
 ```
 
+```r
+GPS_raw$diahora&lt;-paste(GPS_raw$DateGMT,GPS_raw$TimeGMT)
+GPS_raw$diahora&lt;-as.POSIXct(strptime(GPS_raw$diahora, 
+                                       "%d/%m/%Y %H:%M:%S"),"GMT")
+```
+
 Renombra el objeto.
 
 ```r
-Opcion2&lt;-GPS_Todos
+Opcion2&lt;-GPS_raw
 ```
 
 Supongamos que para nuestros datos tenemos 5 horas de diferencia.  
@@ -296,39 +301,23 @@ Nota que hora se resta a la columna diahora y las cinco horas se multiplican por
 Listo!
 
 ```r
-head(Opcion1$hora_corregida,5)
+head(Opcion2$hora_corregida,5)
 ```
 
 ```
-## Warning: Unknown or uninitialised column: `hora_corregida`.
-```
-
-```
-## NULL
+## [1] "2017-11-02 12:05:30 GMT" "2017-11-02 12:09:35 GMT"
+## [3] "2017-11-02 12:13:50 GMT" "2017-11-02 12:17:59 GMT"
+## [5] "2017-11-02 12:22:13 GMT"
 ```
 
 Verificar
 
 ```r
-range(Opcion1$hora_corregida)
+range(Opcion2$hora_corregida)
 ```
 
 ```
-## Warning: Unknown or uninitialised column: `hora_corregida`.
-```
-
-```
-## Warning in min(x, na.rm = na.rm): ningún argumento finito para min; retornando
-## Inf
-```
-
-```
-## Warning in max(x, na.rm = na.rm): ningun argumento finito para max; retornando -
-## Inf
-```
-
-```
-## [1]  Inf -Inf
+## [1] "2017-11-02 12:05:30 GMT" "2017-11-27 04:48:57 GMT"
 ```
 
 .center[
@@ -348,7 +337,7 @@ library(lubridate)
 Renombra tu objeto.
 
 ```r
-Opcion3&lt;-GPS_Todos
+Opcion3&lt;-GPS_raw
 ```
 
 Convertir usando dmy_hms
@@ -402,7 +391,10 @@ name: tz
 Renombra tu objeto
 
 ```r
-Opcion4&lt;-GPS_Todos
+GPS_raw$diahora&lt;-paste(GPS_raw$DateGMT,GPS_raw$TimeGMT)
+GPS_raw$diahora&lt;-as.POSIXct(strptime(GPS_raw$diahora, 
+                                       "%d/%m/%Y %H:%M:%S"),"GMT")
+Opcion4&lt;-GPS_raw
 ```
 
 Cargar paquete
@@ -478,7 +470,7 @@ OlsonNames()
 ```
 Te van a aparecer muchos resultados.
 
-Otra opción es ver la [&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#22577a;" viewBox="0 0 576 512"&gt;&lt;path d="M576 24v127.984c0 21.461-25.96 31.98-40.971 16.971l-35.707-35.709-243.523 243.523c-9.373 9.373-24.568 9.373-33.941 0l-22.627-22.627c-9.373-9.373-9.373-24.569 0-33.941L442.756 76.676l-35.703-35.705C391.982 25.9 402.656 0 424.024 0H552c13.255 0 24 10.745 24 24zM407.029 270.794l-16 16A23.999 23.999 0 0 0 384 303.765V448H64V128h264a24.003 24.003 0 0 0 16.97-7.029l16-16C376.089 89.851 365.381 64 344 64H48C21.49 64 0 85.49 0 112v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48V287.764c0-21.382-25.852-32.09-40.971-16.97z"/&gt;&lt;/svg&gt;lista en Wikipedia](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).
+Otra opción es ver la [&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#e63946;" viewBox="0 0 576 512"&gt;&lt;path d="M576 24v127.984c0 21.461-25.96 31.98-40.971 16.971l-35.707-35.709-243.523 243.523c-9.373 9.373-24.568 9.373-33.941 0l-22.627-22.627c-9.373-9.373-9.373-24.569 0-33.941L442.756 76.676l-35.703-35.705C391.982 25.9 402.656 0 424.024 0H552c13.255 0 24 10.745 24 24zM407.029 270.794l-16 16A23.999 23.999 0 0 0 384 303.765V448H64V128h264a24.003 24.003 0 0 0 16.97-7.029l16-16C376.089 89.851 365.381 64 344 64H48C21.49 64 0 85.49 0 112v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48V287.764c0-21.382-25.852-32.09-40.971-16.97z"/&gt;&lt;/svg&gt; lista en Wikipedia](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).
 
 ---
 name: exportar
@@ -487,7 +479,7 @@ class: center, middle
 &lt;h1&gt;&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#22577a;" viewBox="0 0 576 512"&gt;&lt;path d="M384 121.9c0-6.3-2.5-12.4-7-16.9L279.1 7c-4.5-4.5-10.6-7-17-7H256v128h128zM571 308l-95.7-96.4c-10.1-10.1-27.4-3-27.4 11.3V288h-64v64h64v65.2c0 14.3 17.3 21.4 27.4 11.3L571 332c6.6-6.6 6.6-17.4 0-24zm-379 28v-32c0-8.8 7.2-16 16-16h176V160H248c-13.2 0-24-10.8-24-24V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V352H208c-8.8 0-16-7.2-16-16z"/&gt;&lt;/svg&gt;
 
 # 4. Exportar 
-Para esta parte necesitas saber exportar tus datos, si necesitas recordar como hacerlo, te recomiendo [&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#22577a;" viewBox="0 0 576 512"&gt;&lt;path d="M576 24v127.984c0 21.461-25.96 31.98-40.971 16.971l-35.707-35.709-243.523 243.523c-9.373 9.373-24.568 9.373-33.941 0l-22.627-22.627c-9.373-9.373-9.373-24.569 0-33.941L442.756 76.676l-35.703-35.705C391.982 25.9 402.656 0 424.024 0H552c13.255 0 24 10.745 24 24zM407.029 270.794l-16 16A23.999 23.999 0 0 0 384 303.765V448H64V128h264a24.003 24.003 0 0 0 16.97-7.029l16-16C376.089 89.851 365.381 64 344 64H48C21.49 64 0 85.49 0 112v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48V287.764c0-21.382-25.852-32.09-40.971-16.97z"/&gt;&lt;/svg&gt;empezar por aquí](https://miriamll.github.io/Curso_CIAD/Clase3Parte2#54).
+Para esta parte necesitas saber exportar tus datos, si necesitas recordar como hacerlo, te recomiendo [&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#e63946;" viewBox="0 0 576 512"&gt;&lt;path d="M576 24v127.984c0 21.461-25.96 31.98-40.971 16.971l-35.707-35.709-243.523 243.523c-9.373 9.373-24.568 9.373-33.941 0l-22.627-22.627c-9.373-9.373-9.373-24.569 0-33.941L442.756 76.676l-35.703-35.705C391.982 25.9 402.656 0 424.024 0H552c13.255 0 24 10.745 24 24zM407.029 270.794l-16 16A23.999 23.999 0 0 0 384 303.765V448H64V128h264a24.003 24.003 0 0 0 16.97-7.029l16-16C376.089 89.851 365.381 64 344 64H48C21.49 64 0 85.49 0 112v352c0 26.51 21.49 48 48 48h352c26.51 0 48-21.49 48-48V287.764c0-21.382-25.852-32.09-40.971-16.97z"/&gt;&lt;/svg&gt;empezar por aquí](https://miriamll.github.io/Curso_CIAD/Clase3Parte2#54).
 
 ---
 

@@ -113,7 +113,7 @@ GPS_01<-GPS_01
 Cargar datos de diez individuos
 ```{r, message=FALSE, warning=FALSE}
 library(sula)
-GPS_diez<-GPS_raw
+GPS_raw<-GPS_raw
 ```
 
 ---
