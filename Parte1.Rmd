@@ -39,10 +39,10 @@ background-size: cover
 # Intro
 
 En esta presentación verán como:
-- Importar datos a R
-- Agregar columna ID
-- Graficar trayectorias
-- Exportar nuestro nuevo data frame
+- [Importar datos a R](#importar)
+- [Agregar columna ID](#ids)
+- [Graficar trayectorias](#plot)
+- [Exportar nuestro nuevo data frame](#export)
 
 ```{r, echo=FALSE,include=FALSE, message=FALSE}
 library(emo)
@@ -59,7 +59,7 @@ library(ggplot2)
 - Tienen conocimientos básicos de R, si no te recomiendo [`r fa("external-link-alt", fill = "#e63946")`empezar por aquí ](https://miriamlerma.netlify.app/posts/2021-03-01-introar/) <br>
   
 ---
-
+name: importar
 class:center,middle
 
 <h1>`r fa("download", fill = "#22577a")`
@@ -164,6 +164,7 @@ Si quieres descargar los archivos de prueba [`r fa("external-link-alt", fill = "
 Para poder identificar los diferentes GPS, antes de unir todos tus datos deberás agregar un ID.
 
 ---
+name: ids
 
 ### 1.6. Agregar ID
 
@@ -237,6 +238,21 @@ Todos_GPS
 
 ---
 
+### 1.8. Usando purrr
+
+Esta otra función es similar a las anteriores y tambíen te permite unir multiples archivos. Es tu elección cual te parece mas práctica.
+```{r, eval=FALSE}
+archivos<-list.files(".",
+                 pattern="*.csv",
+                 full.names=TRUE)
+
+datos<-purrr::map_df(archivos,
+               read.csv)
+```
+
+
+---
+name: plot
 class:center,middle
 
 <h1>`r fa("paint-brush", fill = "#22577a")`
@@ -268,7 +284,7 @@ ggplot(data = Todos_GPS, aes(x = Latitude, y = Longitude)) +
 _Nota_ es posible que en la presentación las lineas se vean en color gris, pero en tu Rstudio mostrara los diferentes colores.
 
 ---
-
+name: export
 class: center, middle
 
 <h1>`r fa("file-export", fill = "#22577a")`
@@ -301,14 +317,14 @@ write_csv(
 - Para dudas, comentarios y sugerencias:  
 Escríbeme a miriamjlerma@gmail.com
 
-- Este material esta accesible y se encuentra en mi [`r fa("external-link-alt", fill = "#e63946")`github](https://github.com/MiriamLL/Curso_tracking/).
+- Este material esta accesible y se encuentra en mi [`r fa("external-link-alt", fill = "#e63946")`github](https://github.com/MiriamLL/Curso_tracking/) y mi [página](www.miriam-lerma.com)
 
 <br>
+Te recomiendo continuar con el paquete **sula** que contiene [funciones para editar tus datos y calcular parametros](https://www.miriam-lerma.com/posts/2021-05-14-sula/)
 
-Si quieres dar créditos puedes usar:
-- Lerma M, Dehnhard N, Luna-Jorquera G, Voigt CC, Garthe S (2020) Breeding stage, not sex, affects foraging characteristics in masked boobies at Rapa Nui. Behavioral ecology and sociobiology 74: 149 [`r fa("external-link-alt", fill = "#e63946")`OpenAccess](https://link.springer.com/article/10.1007/s00265-020-02921-1). <br>
-**Los datos de prueba provienen de esta publicación. **
-
+<br>
+**Los datos de prueba provienen de la publicación: **
+- Lerma M, Dehnhard N, Luna-Jorquera G, Voigt CC, Garthe S (2020) Breeding stage, not sex, affects foraging characteristics in masked boobies at Rapa Nui. Behavioral ecology and sociobiology 74: 149 [`r fa("external-link-alt", fill = "#e63946")`OpenAccess](https://link.springer.com/article/10.1007/s00265-020-02921-1). 
 <br>
 <br>
 <br>

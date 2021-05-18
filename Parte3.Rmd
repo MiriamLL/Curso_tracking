@@ -420,7 +420,7 @@ GPS_01<-Lista_GPS[[1]]
 
 ## 4.2. Aplicar
 
-Pero para no hacer individuo por individuo, podemos hacer una **iteracion** que se aplique a todos los elementos de la lista
+Pero para no hacer individuo por individuo, podemos hacer una **iteración** que se aplique a todos los elementos de la lista
 
 Si quieres usar esta **iteración**, solo asegurate de 
 - Tener una lista con los datos de tus GPS que contenga una columna IDs y **diahora** en formato POSIXct

@@ -441,8 +441,8 @@ Recapitulando:
 
 Si quieres dar créditos puedes usar:
 - Lerma M (2021) Package sula. Zenodo. http://doi.org/10.5281/zenodo.4682898
-- Lerma M, Dehnhard N, Luna-Jorquera G, Voigt CC, Garthe S (2020) Breeding stage, not sex, affects foraging characteristics in masked boobies at Rapa Nui. Behavioral ecology and sociobiology 74: 149 [`r fa("external-link-alt", fill = "#e63946")`OpenAccess](https://link.springer.com/article/10.1007/s00265-020-02921-1)<br>
-Los datos de prueba vienen de esa publicación. 
+- Los datos de prueba vienen de esa publicación:
+Lerma M, Dehnhard N, Luna-Jorquera G, Voigt CC, Garthe S (2020) Breeding stage, not sex, affects foraging characteristics in masked boobies at Rapa Nui. Behavioral ecology and sociobiology 74: 149 [`r fa("external-link-alt", fill = "#e63946")`OpenAccess](https://link.springer.com/article/10.1007/s00265-020-02921-1)<br>
 
 
 .center[
